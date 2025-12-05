@@ -1,25 +1,24 @@
 /*
-  script.js
-  - 수정 위치 안내: 초기 테마 설정, 토글 텍스트, 갤러리 항목 동작을 이 파일에서 변경하세요.
+  script.js — NK Laser & Optics Laboratory
+  - 다크모드, 검색 기능, 부드러운 상호작용 담당
+  - 수정 위치: 검색 API 또는 테마 동작을 변경하려면 이 파일을 편집하세요
 */
 
 (function(){
   const root = document.documentElement;
   const themeToggle = document.getElementById('theme-toggle');
-  const modal = document.getElementById('img-modal');
-  const modalImg = document.getElementById('modal-image');
-  const modalCaption = document.getElementById('modal-caption');
-  const modalClose = document.getElementById('modal-close');
+  const resInput = document.getElementById('res-query');
+  const searchButtons = document.querySelectorAll('.search-buttons button');
 
-  // 초기 테마 설정: 로컬 스토리지 우선, 그 다음 시스템 선호
+  /* 다크 모드 초기화 및 토글 */
   function initTheme(){
-    const saved = localStorage.getItem('site-theme');
+    const saved = localStorage.getItem('lab-theme');
     if(saved){
       root.setAttribute('data-theme', saved);
-      themeToggle.setAttribute('aria-pressed', saved === 'dark');
+      if(themeToggle) themeToggle.setAttribute('aria-pressed', saved === 'dark');
     } else if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){
       root.setAttribute('data-theme','dark');
-      themeToggle.setAttribute('aria-pressed', 'true');
+      if(themeToggle) themeToggle.setAttribute('aria-pressed', 'true');
     }
   }
 
@@ -33,31 +32,14 @@
       root.removeAttribute('data-theme');
       themeToggle.setAttribute('aria-pressed','false');
     }
-    localStorage.setItem('site-theme', next);
+    localStorage.setItem('lab-theme', next);
   }
 
-  themeToggle && themeToggle.addEventListener('click', toggleTheme);
-
-  // 갤러리 모달 동작 (이전 기능 — 지금은 리소스 검색이 메인입니다)
-  function openModal(src, alt){
-    if(!modal) return;
-    modalImg.src = src;
-    modalImg.alt = alt || '';
-    modalCaption.textContent = alt || '';
-    modal.setAttribute('aria-hidden','false');
-    modalClose && modalClose.focus();
-  }
-  function closeModal(){
-    if(!modal) return;
-    modal.setAttribute('aria-hidden','true');
-    modalImg.src = '';
-    modalCaption.textContent = '';
+  if(themeToggle){
+    themeToggle.addEventListener('click', toggleTheme);
   }
 
-  // 리소스 검색 핸들러
-  const resInput = document.getElementById('res-query');
-  const searchButtons = document.querySelectorAll('.search-actions button');
-
+  /* 리소스 검색 핸들러 */
   function openResource(platform, query){
     if(!query) return;
     const q = encodeURIComponent(query);
@@ -75,6 +57,7 @@
   if(searchButtons && resInput){
     searchButtons.forEach(btn => {
       btn.addEventListener('click', (e) => {
+        e.preventDefault();
         const platform = btn.getAttribute('data-target');
         const q = resInput.value.trim();
         if(!q){
@@ -94,6 +77,19 @@
     });
   }
 
-  // 초기화
+  /* 부드러운 스크롤 (네비게이션) */
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e){
+      const href = this.getAttribute('href');
+      if(href === '#') return;
+      const target = document.querySelector(href);
+      if(target){
+        e.preventDefault();
+        target.scrollIntoView({behavior: 'smooth'});
+      }
+    });
+  });
+
+  /* 초기화 */
   initTheme();
 })();

@@ -3,143 +3,145 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>NK KIM — Laser Beam Shaping</title>
-  <!-- 수정 위치: 페이지 제목은 이 <title>에서 변경하세요. -->
-  <!-- 깔끔한 타이포를 위해 시스템 폰트 스택을 사용합니다. 필요하면 Google Fonts 링크 추가 가능합니다. -->
+  <title>NK — Advanced Solid State Laser Lab (Hanyang University)</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- 접근성: 스킵 링크 -->
   <a class="skip-link" href="#main">메인으로 건너뛰기</a>
 
+  <!-- 헤더 -->
   <header role="banner" class="site-header">
     <div class="container header-inner">
-      <div class="brand">
-        <a href="#" aria-label="NK KIM 홈페이지 홈">NK KIM</a>
+      <div class="logo-section">
+        <h1 class="site-title">NK (KNK)</h1>
+        <p class="site-subtitle">Advanced Solid State Laser Lab — Hanyang University</p>
+        <p class="site-subtitle affiliation">Affiliation: Hanyang University</p>
       </div>
 
       <nav role="navigation" aria-label="주요 메뉴" class="main-nav">
         <ul>
-          <li><a href="#hero">Home</a></li>
-          <li><a href="#features">Features</a></li>
-          <li><a href="#gallery">Gallery</a></li>
-          <li><a href="#contact">Contact</a></li>
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="research.html" class="nav-link">Research</a></li>
+          <li><a href="#contact" class="nav-link">Contact</a></li>
         </ul>
       </nav>
 
-      <div class="controls">
-        <button id="theme-toggle" class="theme-toggle" aria-pressed="false" aria-label="다크 모드 토글">다크모드</button>
-      </div>
+      <button id="theme-toggle" class="theme-toggle" aria-pressed="false" aria-label="테마 전환">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
     </div>
   </header>
 
   <main id="main" role="main">
 
-    <section id="hero" class="hero" aria-labelledby="hero-title">
+    <!-- 히어로 섹션 -->
+    <section id="home" class="hero" aria-labelledby="hero-title">
       <div class="container hero-inner">
-        <h1 id="hero-title">NK KIM — Laser Beam Shaping</h1>
-        <p class="lead">레이저 빔 쉐이핑, 빔 프로파일링 및 광학 설계에 관한 예시 페이지입니다. 연구/프로젝트 소개에 적합합니다.</p>
-        <p>
-          <a class="btn primary" href="#features">연구 보기</a>
-        </p>
-        <!-- 수정 위치: 히어로 섹션의 주요 텍스트와 CTA를 이 영역에서 변경하세요. -->
-      </div>
-    </section>
-
-    <section id="features" class="features" aria-labelledby="features-title">
-      <div class="container">
-        <h2 id="features-title">연구 및 주요 항목</h2>
-        <div class="features-grid">
-          <article class="feature" aria-labelledby="f1">
-            <h3 id="f1">레이저 빔 쉐이핑</h3>
-            <p>광학 요소와 위상/진폭 변조를 통해 원하는 빔 프로파일을 생성합니다.</p>
-          </article>
-          <article class="feature" aria-labelledby="f2">
-            <h3 id="f2">빔 프로파일링</h3>
-            <p>카메라/센서 기반 측정으로 빔 품질(Q), 프로파일, 불균일성 분석.</p>
-          </article>
-          <article class="feature" aria-labelledby="f3">
-            <h3 id="f3">광학 설계 및 시뮬레이션</h3>
-            <p>광선 추적과 파면(phase) 설계를 통한 최적화 워크플로우.</p>
-          </article>
+        <div class="hero-content">
+          <h2 id="hero-title" class="hero-title">NK — Optical Engineer & Researcher</h2>
+          <p class="hero-desc">
+            개인 이력서 / 연구자 페이지입니다. 레이저 빔 쉐이핑, 광학 설계, 고출력 레이저 시스템 등
+            광학·포토닉스 분야의 연구와 기술 개발을 수행합니다.
+          </p>
+          <p class="hero-highlight">
+            Advanced Solid State Laser Lab · Hanyang University
+          </p>
+          <p class="hero-desc"><strong>Email:</strong> <a href="mailto:knk6103@gmail.com">knk6103@gmail.com</a></p>
         </div>
-        <!-- 수정 위치: 기능 카드(Feature) 내용을 추가/수정하세요. -->
+        <div class="hero-accent"></div>
       </div>
     </section>
 
-    <section id="resources" class="resources" aria-labelledby="resources-title">
+    <!-- 연구 분야 섹션 -->
+    <section id="research" class="research" aria-labelledby="research-title">
       <div class="container">
-        <h2 id="resources-title">Research Resources</h2>
-        <p class="muted">키워드를 입력하고 원하는 플랫폼을 선택하세요. 특허, 논문, 프리프린트 등을 빠르게 찾을 수 있습니다.</p>
+        <h2 id="research-title">Research Areas</h2>
+        <div class="research-grid">
+          <article class="research-card" aria-labelledby="r1">
+            <div class="card-icon">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="currentColor"/>
+              </svg>
+            </div>
+            <h3 id="r1">Laser Beam Shaping</h3>
+            <p>광학 요소와 위상 변조를 통한 고효율 빔 쉐이핑 및 프로파일링.</p>
+          </article>
 
-        <form id="resource-search" class="resource-search" role="search" aria-label="리소스 검색">
-          <!-- 수정 위치: 검색 기본 동작이나 버튼 레이블을 변경하려면 이 폼을 편집하세요. -->
-          <label for="res-query" class="sr-only">검색어</label>
-          <input id="res-query" name="q" type="search" placeholder="예: beam shaping phase plate" required>
-          <div class="search-actions" role="group" aria-label="검색 플랫폼">
-            <button type="button" data-target="scholar" class="btn primary">Google Scholar</button>
-            <button type="button" data-target="patents" class="btn">Google Patents</button>
-            <button type="button" data-target="arxiv" class="btn">arXiv</button>
-            <button type="button" data-target="ieee" class="btn">IEEE Xplore</button>
-          </div>
-        </form>
+          <article class="research-card" aria-labelledby="r2">
+            <div class="card-icon">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+                <path d="M12 7v5l4 2.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3 id="r2">High-Power Lasers</h3>
+            <p>수 W에서 kW 범위의 고출력 레이저 시스템 연구 및 최적화.</p>
+          </article>
 
-        <ul class="icon-grid" role="list">
-          <!-- 간단한 아이콘 카드: 이미지 대신 SVG 아이콘을 사용하여 가볍고 깔끔한 느낌을 유지합니다. -->
-          <li class="icon-card" aria-hidden="false">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="3" fill="var(--hanyang-blue-2)"></rect><path d="M7 9h10M7 13h6" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <span>Beam Shaping</span>
-          </li>
-          <li class="icon-card">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9" fill="var(--hanyang-blue-3)"></circle><path d="M8 12h8" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg>
-            <span>Beam Profiling</span>
-          </li>
-          <li class="icon-card">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><path d="M4 6h16v12H4z" fill="var(--hanyang-blue-1)"></path><path d="M8 10h8M8 14h4" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg>
-            <span>Optical Design</span>
-          </li>
-          <li class="icon-card">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="4" fill="var(--hanyang-blue-2)"></rect><path d="M9 8v8l6-4-6-4z" fill="#fff"/></svg>
-            <span>Tools & Code</span>
-          </li>
-        </ul>
+          <article class="research-card" aria-labelledby="r3">
+            <div class="card-icon">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z" stroke="currentColor" stroke-width="2"/>
+              </svg>
+            </div>
+            <h3 id="r3">Optical Design & Simulation</h3>
+            <p>광학 시뮬레이션과 최적화를 통한 혁신적인 설계.</p>
+          </article>
 
-        <div class="resource-links">
-          <h3>예시 링크</h3>
-          <ul>
-            <li><a href="https://scholar.google.com" target="_blank" rel="noopener">Google Scholar</a></li>
-            <li><a href="https://patents.google.com" target="_blank" rel="noopener">Google Patents</a></li>
-            <li><a href="https://arxiv.org" target="_blank" rel="noopener">arXiv</a></li>
-            <li><a href="https://ieeexplore.ieee.org" target="_blank" rel="noopener">IEEE Xplore</a></li>
-          </ul>
+          <article class="research-card" aria-labelledby="r4">
+            <div class="card-icon">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+                <path d="M7 10l3 3 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h3 id="r4">Nonlinear Optics</h3>
+            <p>비선형 광학 현상을 이용한 파장 변환 및 고차 조화 생성.</p>
+          </article>
         </div>
       </div>
     </section>
 
+    <!-- 연락처 섹션 -->
     <section id="contact" class="contact" aria-labelledby="contact-title">
       <div class="container">
-        <h2 id="contact-title">문의하기</h2>
-        <form class="contact-form" action="#" method="post" aria-label="문의 양식">
-          <label for="name">이름</label>
-          <input id="name" name="name" type="text">
+        <h2 id="contact-title">Contact Information</h2>
+        <div class="contact-content">
+          <div class="contact-info">
+            <ul class="contact-list">
+              <li><strong>Name:</strong> NK (KNK)</li>
+              <li><strong>Laboratory:</strong> Advanced Solid State Laser Lab</li>
+              <li><strong>Institution:</strong> Hanyang University</li>
+              <li><strong>Email:</strong> <a href="mailto:knk6103@gmail.com">knk6103@gmail.com</a></li>
+            </ul>
+          </div>
 
-          <label for="email">이메일</label>
-          <input id="email" name="email" type="email">
-
-          <label for="message">메시지</label>
-          <textarea id="message" name="message" rows="4" placeholder="레이저 빔 쉐이핑 관련 관심사나 문의 내용을 적어주세요."></textarea>
-
-          <button class="btn" type="submit">전송</button>
-        </form>
-        <!-- 수정 위치: 연락처 폼 필드 및 액션을 필요에 맞게 바꾸세요. -->
+          <div class="research-search">
+            <h3>Literature Search</h3>
+            <form id="resource-search" role="search" aria-label="논문 검색">
+              <input id="res-query" name="q" type="search" placeholder="논문/특허 검색..." required>
+              <div class="search-buttons">
+                <button type="button" data-target="scholar" class="btn primary">Scholar</button>
+                <button type="button" data-target="arxiv" class="btn">arXiv</button>
+                <button type="button" data-target="patents" class="btn">Patents</button>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
     </section>
 
   </main>
 
+  <!-- 푸터 -->
   <footer role="contentinfo" class="site-footer">
     <div class="container">
-      <small>© NK KIM — Laser Beam Shaping</small>
+      <p>© 2024 NK Laser & Optics Laboratory. Hanyang University.</p>
     </div>
   </footer>
 

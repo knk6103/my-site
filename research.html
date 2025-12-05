@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Research — NK (KNK)</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">메인으로 건너뛰기</a>
+
+  <header role="banner" class="site-header">
+    <div class="container header-inner">
+      <div class="logo-section">
+        <h1 class="site-title">NK (KNK)</h1>
+        <p class="site-subtitle">Advanced Solid State Laser Lab — Hanyang University</p>
+      </div>
+
+      <nav role="navigation" aria-label="주요 메뉴" class="main-nav">
+        <ul>
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="research.html" class="nav-link">Research</a></li>
+          <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+
+      <button id="theme-toggle" class="theme-toggle" aria-pressed="false" aria-label="테마 전환">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="5"/>
+        </svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="main" role="main">
+    <section class="research-portal" aria-labelledby="research-portal-title">
+      <div class="container">
+        <h2 id="research-portal-title">Research — Papers & Patents</h2>
+
+        <div class="research-tools">
+          <div class="left-col">
+            <div class="upload-area">
+              <h3>Upload Papers / Patents</h3>
+              <p class="muted">업로드한 파일은 브라우저의 IndexedDB에 저장됩니다. 로컬에서만 이용 가능합니다.</p>
+              <input id="file-input" type="file" multiple accept=".pdf,.txt,.md" />
+              <div id="file-list" class="file-list" aria-live="polite"></div>
+            </div>
+
+            <div class="entry-form">
+              <h3>Add Manual Entry</h3>
+              <form id="entry-form">
+                <label>Title<input id="entry-title" required></label>
+                <label>Authors<input id="entry-authors"></label>
+                <label>Year<input id="entry-year" type="number" min="1900" max="2100"></label>
+                <label>Type
+                  <select id="entry-type">
+                    <option value="paper">Paper</option>
+                    <option value="patent">Patent</option>
+                  </select>
+                </label>
+                <label>Abstract<textarea id="entry-abstract"></textarea></label>
+                <div style="display:flex;gap:8px;margin-top:8px;">
+                  <button class="btn primary" type="submit">Save Entry</button>
+                  <button class="btn" type="button" id="clear-entries">Clear All</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div class="right-col">
+            <div class="search-panel">
+              <h3>AI-like Search</h3>
+              <input id="ai-query" placeholder="검색어를 입력하세요 (예: beam shaping aberration)" />
+              <div style="display:flex;gap:8px;margin-top:8px;">
+                <button id="run-search" class="btn primary">Search</button>
+                <button id="open-ai-prompt" class="btn">Generate AI Prompt</button>
+              </div>
+              <div id="search-results" class="result-list"></div>
+            </div>
+
+            <div class="ai-panel">
+              <h3>AI Prompt / Summary</h3>
+              <p class="muted">간단한 요약/AI 프롬프트를 생성해 복사할 수 있습니다. (외부 AI API는 연결되어 있지 않습니다.)</p>
+              <textarea id="ai-prompt" rows="6"></textarea>
+              <div style="display:flex;gap:8px;margin-top:8px;">
+                <button id="copy-prompt" class="btn primary">Copy Prompt</button>
+                <button id="clear-prompt" class="btn">Clear</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer role="contentinfo" class="site-footer">
+    <div class="container">
+      <p>© 2025 NK (KNK). Advanced Solid State Laser Lab — Hanyang University.</p>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/fuse.js@6.6.2/dist/fuse.min.js"></script>
+  <script src="script.js" defer></script>
+  <script src="research.js" defer></script>
+</body>
+</html>
