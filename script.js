@@ -38,42 +38,61 @@
 
   themeToggle && themeToggle.addEventListener('click', toggleTheme);
 
-  // 갤러리 모달 동작
+  // 갤러리 모달 동작 (이전 기능 — 지금은 리소스 검색이 메인입니다)
   function openModal(src, alt){
+    if(!modal) return;
     modalImg.src = src;
     modalImg.alt = alt || '';
     modalCaption.textContent = alt || '';
     modal.setAttribute('aria-hidden','false');
-    // 포커스 관리: 모달 안으로 포커스 이동
-    modalClose.focus();
+    modalClose && modalClose.focus();
   }
   function closeModal(){
+    if(!modal) return;
     modal.setAttribute('aria-hidden','true');
     modalImg.src = '';
     modalCaption.textContent = '';
   }
 
-  // 갤러리 항목에 클릭 이벤트 연결
-  document.querySelectorAll('.gallery-item').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      const src = btn.getAttribute('data-src');
-      const alt = btn.getAttribute('data-alt') || btn.querySelector('img')?.alt || '';
-      openModal(src, alt);
-    });
-  });
+  // 리소스 검색 핸들러
+  const resInput = document.getElementById('res-query');
+  const searchButtons = document.querySelectorAll('.search-actions button');
 
-  // 모달 닫기 핸들러
-  modalClose && modalClose.addEventListener('click', closeModal);
-  modal.addEventListener('click', (e) => {
-    if(e.target === modal) closeModal();
-  });
-
-  // 키보드: ESC로 모달 닫기
-  document.addEventListener('keydown', (e) => {
-    if(e.key === 'Escape'){
-      if(modal.getAttribute('aria-hidden') === 'false') closeModal();
+  function openResource(platform, query){
+    if(!query) return;
+    const q = encodeURIComponent(query);
+    let url = '';
+    switch(platform){
+      case 'patents': url = `https://patents.google.com/?q=${q}`; break;
+      case 'arxiv': url = `https://arxiv.org/search/?query=${q}&searchtype=all`; break;
+      case 'ieee': url = `https://ieeexplore.ieee.org/search/searchresult.jsp?queryText=${q}`; break;
+      case 'scholar':
+      default: url = `https://scholar.google.com/scholar?q=${q}`; break;
     }
-  });
+    window.open(url, '_blank', 'noopener');
+  }
+
+  if(searchButtons && resInput){
+    searchButtons.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const platform = btn.getAttribute('data-target');
+        const q = resInput.value.trim();
+        if(!q){
+          resInput.focus();
+          return;
+        }
+        openResource(platform, q);
+      });
+    });
+    // 엔터를 누르면 기본적으로 Scholar에서 검색
+    resInput.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter'){
+        e.preventDefault();
+        const q = resInput.value.trim();
+        if(q) openResource('scholar', q);
+      }
+    });
+  }
 
   // 초기화
   initTheme();
