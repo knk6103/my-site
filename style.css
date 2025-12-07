@@ -864,13 +864,38 @@ main {
   font-weight: 700;
 }
 
-.day-number {
-  font-size: 0.95rem;
-  color: var(--dark-text);
-  font-weight: 600;
+.day-number { 
+  font-size: 0.95rem; 
+  color: var(--dark-text); 
+  font-weight: 600; 
 }
 
-/* Calendar sidebar */
+.event-preview {
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.event-tag {
+  font-size: 0.7rem;
+  padding: 3px 6px;
+  background: linear-gradient(135deg, rgba(11, 95, 165, 0.08), rgba(30, 144, 255, 0.05));
+  border-radius: 3px;
+  border-left: 2px solid var(--primary-blue);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--dark-text);
+  font-weight: 500;
+}
+
+.event-more {
+  font-size: 0.7rem;
+  color: var(--primary-blue);
+  font-weight: 600;
+  padding: 2px 4px;
+}/* Calendar sidebar */
 .calendar-sidebar {
   display: flex;
   flex-direction: column;
@@ -900,6 +925,41 @@ main {
   background-clip: text;
   padding-bottom: 8px;
   border-bottom: 2px solid var(--border-color);
+}
+
+.event-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.event-title-row h4 {
+  margin: 0;
+  flex: 1;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--dark-text);
+}
+
+.btn-importance {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0;
+  color: var(--primary-blue);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.btn-importance:hover {
+  transform: scale(1.3);
+  color: var(--accent-blue);
 }
 
 .event-form-card label {

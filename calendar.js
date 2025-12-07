@@ -102,6 +102,8 @@
       cell.className = 'calendar-day';
       
       const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+      cell.dataset.date = dateStr;
+      
       const dayNum = document.createElement('div');
       dayNum.className = 'day-number';
       dayNum.textContent = day;
@@ -117,6 +119,8 @@
       
       calendarDaysEl.appendChild(cell);
     }
+    
+    renderCalendarWithEvents();
   }
 
   async function selectDate(dateStr, cellEl){
@@ -153,8 +157,25 @@
       el.className = 'event-item';
       el.style.borderLeftColor = getColorValue(event.color || 'blue');
       
+      const titleRow = document.createElement('div');
+      titleRow.className = 'event-title-row';
+      
       const title = document.createElement('h4');
       title.textContent = event.title;
+      
+      const importanceBtn = document.createElement('button');
+      importanceBtn.className = 'btn-importance';
+      importanceBtn.innerHTML = event.important ? '★' : '☆';
+      importanceBtn.title = event.important ? 'Remove importance' : 'Mark as important';
+      importanceBtn.addEventListener('click', async () => {
+        event.important = !event.important;
+        await idbPut(event);
+        await renderEventsForDate(dateStr);
+        renderCalendarWithEvents();
+      });
+      
+      titleRow.appendChild(title);
+      titleRow.appendChild(importanceBtn);
       
       const meta = document.createElement('div');
       meta.className = 'event-meta';
@@ -174,17 +195,62 @@
         if(confirm('Delete this event?')){
           await idbDelete(event.id);
           await renderEventsForDate(dateStr);
+          renderCalendarWithEvents();
         }
       });
       
       actions.appendChild(deleteBtn);
       
-      el.appendChild(title);
+      el.appendChild(titleRow);
       el.appendChild(meta);
       if(event.desc) el.appendChild(desc);
       el.appendChild(actions);
       
       eventsListEl.appendChild(el);
+    });
+  }
+
+  async function renderCalendarWithEvents(){
+    const allEvents = await idbGetAll();
+    const eventsByDate = {};
+    allEvents.forEach(e => {
+      if(!eventsByDate[e.date]) eventsByDate[e.date] = [];
+      eventsByDate[e.date].push(e);
+    });
+    
+    document.querySelectorAll('.calendar-day:not(.empty)').forEach(cell => {
+      const dateStr = cell.dataset.date;
+      if(!dateStr) return;
+      
+      let eventPreview = cell.querySelector('.event-preview');
+      if(eventPreview) eventPreview.remove();
+      
+      if(eventsByDate[dateStr] && eventsByDate[dateStr].length > 0){
+        const events = eventsByDate[dateStr];
+        const preview = document.createElement('div');
+        preview.className = 'event-preview';
+        
+        events.slice(0, 2).forEach(event => {
+          const eventTag = document.createElement('div');
+          eventTag.className = 'event-tag';
+          eventTag.style.borderLeftColor = getColorValue(event.color || 'blue');
+          
+          const eventText = document.createElement('span');
+          eventText.textContent = (event.important ? '★ ' : '') + event.title;
+          
+          eventTag.appendChild(eventText);
+          preview.appendChild(eventTag);
+        });
+        
+        if(events.length > 2){
+          const more = document.createElement('div');
+          more.className = 'event-more';
+          more.textContent = `+${events.length - 2} more`;
+          preview.appendChild(more);
+        }
+        
+        cell.appendChild(preview);
+      }
     });
   }
 
@@ -223,6 +289,7 @@
     
     await idbPut({
       title, date, time, desc, color,
+      important: false,
       added: Date.now()
     });
     
@@ -231,6 +298,7 @@
     
     // Re-render events for selected date
     if(selectedDate) await renderEventsForDate(selectedDate);
+    renderCalendar();
   });
 
   // Initialize
