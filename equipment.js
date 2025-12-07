@@ -74,35 +74,25 @@
   const searchEl = document.getElementById('eq-search');
   const statusFilterEl = document.getElementById('filter-status');
 
-  const categories = ['laser', 'optical', 'measurement', 'power-meter', 'spectroscopy', 'imaging', 'alignment', 'control', 'material', 'safety', 'support', 'other'];
+  const categories = ['laser', 'fabrication', 'measurement', 'electronics', 'support', 'material', 'other'];
   const categoryLabels = {
-    'laser': 'Laser System',
-    'optical': 'Optical Components',
-    'measurement': 'Measurement - General',
-    'power-meter': 'Power Meter',
-    'spectroscopy': 'Spectroscopy',
-    'imaging': 'Imaging Equipment',
-    'alignment': 'Alignment Tools',
-    'control': 'Control & Electronics',
-    'material': 'Materials',
-    'safety': 'Safety Equipment',
+    'laser': 'Laser & Optics',
+    'fabrication': 'Fabrication Equipment',
+    'measurement': 'Measurement & Testing',
+    'electronics': 'Electronics & Control',
     'support': 'Support & Accessories',
+    'material': 'Materials & Consumables',
     'other': 'Other'
   };
 
   function getCategoryColor(category){
     const colors = {
-      'laser': '#ef4444',
-      'optical': '#3b82f6',
+      'laser': '#3b82f6',
+      'fabrication': '#ef4444',
       'measurement': '#10b981',
-      'power-meter': '#06b6d4',
-      'spectroscopy': '#a855f7',
-      'imaging': '#ec4899',
-      'alignment': '#f59e0b',
-      'control': '#f97316',
-      'material': '#8b5cf6',
-      'safety': '#dc2626',
+      'electronics': '#f59e0b',
       'support': '#6b7280',
+      'material': '#8b5cf6',
       'other': '#9ca3af'
     };
     return colors[category] || '#9ca3af';
