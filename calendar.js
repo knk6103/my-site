@@ -64,6 +64,7 @@
   const eventForm = document.getElementById('event-form');
   const eventTitleEl = document.getElementById('event-title');
   const eventDateEl = document.getElementById('event-date');
+  const eventEndEl = document.getElementById('event-end-date');
   const eventTimeEl = document.getElementById('event-time');
   const eventDescEl = document.getElementById('event-desc');
   const eventColorEl = document.getElementById('event-color');
@@ -150,7 +151,27 @@
 
   async function renderEventsForDate(dateStr){
     const allEvents = await idbGetAll();
-    const dayEvents = allEvents.filter(e => e.date === dateStr).sort((a,b) => (a.time || '23:59').localeCompare(b.time || '23:59'));
+    const seen = new Set();
+    const dayEvents = [];
+
+    function inRange(dateStr, startStr, endStr){
+      const d = new Date(dateStr + 'T00:00:00');
+      const s = new Date((startStr || dateStr) + 'T00:00:00');
+      const e = new Date((endStr || startStr || dateStr) + 'T00:00:00');
+      return d >= s && d <= e;
+    }
+
+    for(const e of allEvents){
+      const s = e.startDate || e.date;
+      const en = e.endDate || e.date || s;
+      const key = e.groupId || e.id;
+      if(inRange(dateStr, s, en) && !seen.has(key)){
+        seen.add(key);
+        dayEvents.push(e);
+      }
+    }
+
+    dayEvents.sort((a,b) => (a.time || '23:59').localeCompare(b.time || '23:59'));
     
     eventsListEl.innerHTML = '';
     
@@ -186,7 +207,10 @@
       
       const meta = document.createElement('div');
       meta.className = 'event-meta';
-      meta.textContent = event.time ? event.time : '(all day)';
+      const start = event.startDate || event.date;
+      const end = event.endDate || event.date || start;
+      const rangeText = start === end ? start : `${start} — ${end}`;
+      meta.textContent = event.time ? `${event.time} · ${rangeText}` : rangeText;
       
       const desc = document.createElement('p');
       desc.className = 'event-desc';
@@ -204,8 +228,16 @@
       deleteBtn.className = 'btn btn-small';
       deleteBtn.textContent = 'Delete';
       deleteBtn.addEventListener('click', async () => {
-        if(confirm('Delete this event?')){
-          await idbDelete(event.id);
+        if(confirm('Delete this event (all occurrences)?')){
+          const all = await idbGetAll();
+          const gid = event.groupId;
+          if(gid){
+            for(const it of all){
+              if(it.groupId === gid) await idbDelete(it.id);
+            }
+          } else {
+            await idbDelete(event.id);
+          }
           await renderEventsForDate(dateStr);
           renderCalendarWithEvents();
         }
@@ -225,44 +257,74 @@
 
   async function renderCalendarWithEvents(){
     const allEvents = await idbGetAll();
-    const eventsByDate = {};
-    allEvents.forEach(e => {
-      if(!eventsByDate[e.date]) eventsByDate[e.date] = [];
-      eventsByDate[e.date].push(e);
-    });
+    function inRange(dateStr, startStr, endStr){
+      const d = new Date(dateStr + 'T00:00:00');
+      const s = new Date((startStr || dateStr) + 'T00:00:00');
+      const e = new Date((endStr || startStr || dateStr) + 'T00:00:00');
+      return d >= s && d <= e;
+    }
     
     document.querySelectorAll('.calendar-day:not(.empty)').forEach(cell => {
       const dateStr = cell.dataset.date;
       if(!dateStr) return;
-      
+
       let eventPreview = cell.querySelector('.event-preview');
       if(eventPreview) eventPreview.remove();
-      
-      if(eventsByDate[dateStr] && eventsByDate[dateStr].length > 0){
-        const events = eventsByDate[dateStr];
-        const preview = document.createElement('div');
-        preview.className = 'event-preview';
-        
-        events.slice(0, 2).forEach(event => {
+
+      const preview = document.createElement('div');
+      preview.className = 'event-preview';
+
+      // collect unique groupIds or ids to avoid duplicates
+      const seen = new Set();
+      const hits = [];
+
+      for(const event of allEvents){
+        const s = event.startDate || event.date;
+        const en = event.endDate || event.date || s;
+        if(inRange(dateStr, s, en)){
+          const key = event.groupId || event.id;
+          if(!seen.has(key)){
+            seen.add(key);
+            hits.push({event, start: s, end: en});
+          }
+        }
+      }
+
+      if(hits.length > 0){
+        hits.slice(0,2).forEach(h => {
+          const event = h.event;
+          const s = h.start;
+          const en = h.end;
+
           const eventTag = document.createElement('div');
           eventTag.className = 'event-tag';
           eventTag.style.backgroundColor = getColorValue(event.color || 'blue');
           eventTag.style.borderLeftColor = getColorValue(event.color || 'blue');
-          
+
+          // determine position
+          if(s === en){
+            eventTag.classList.add('single-day');
+          } else if(dateStr === s){
+            eventTag.classList.add('multi','start');
+          } else if(dateStr === en){
+            eventTag.classList.add('multi','end');
+          } else {
+            eventTag.classList.add('multi','middle');
+          }
+
           const eventText = document.createElement('span');
           eventText.textContent = (event.important ? '★ ' : '') + event.title;
-          
           eventTag.appendChild(eventText);
           preview.appendChild(eventTag);
         });
-        
-        if(events.length > 2){
+
+        if(hits.length > 2){
           const more = document.createElement('div');
           more.className = 'event-more';
-          more.textContent = `+${events.length - 2} more`;
+          more.textContent = `+${hits.length - 2} more`;
           preview.appendChild(more);
         }
-        
+
         cell.appendChild(preview);
       }
     });
@@ -282,7 +344,8 @@
   function editEvent(event){
     editingEventId = event.id;
     eventTitleEl.value = event.title;
-    eventDateEl.value = event.date;
+    eventDateEl.value = event.startDate || event.date;
+    eventEndEl.value = event.endDate || event.date || event.startDate || '';
     eventTimeEl.value = event.time || '';
     eventDescEl.value = event.desc || '';
     eventColorEl.value = event.color || 'blue';
@@ -320,7 +383,8 @@
     e.preventDefault();
     
     const title = eventTitleEl.value.trim();
-    const date = eventDateEl.value;
+    const startDate = eventDateEl.value;
+    const endDate = eventEndEl.value || startDate;
     const time = eventTimeEl.value || '';
     const desc = eventDescEl.value.trim();
     const color = eventColorEl.value;
@@ -328,82 +392,80 @@
     const repeatEnd = eventRepeatEndEl.value;
     
     if(!title || !date) return alert('Title and date are required');
-    
+    if(!startDate) return alert('Start date is required');
+
+    function daysBetween(a,b){
+      const da = new Date(a + 'T00:00:00');
+      const db = new Date(b + 'T00:00:00');
+      return Math.round((db - da) / (1000*60*60*24));
+    }
+
+    const duration = Math.max(0, daysBetween(startDate, endDate));
+
     if(editingEventId){
       // Update existing event - delete old repeating events and create new ones
       const allEvents = await idbGetAll();
-      
-      // Find and delete all events with the same base properties (repeating events)
+      // determine groupId of existing
       const baseEventToDelete = allEvents.find(e => e.id === editingEventId);
-      if(baseEventToDelete && baseEventToDelete.repeat !== 'none'){
-        // Delete all events that match the repeat pattern
+      const gid = (baseEventToDelete && baseEventToDelete.groupId) || null;
+      if(gid){
         for(const evt of allEvents){
-          if(evt.title === baseEventToDelete.title && 
-             evt.color === baseEventToDelete.color &&
-             evt.repeat === baseEventToDelete.repeat){
-            await idbDelete(evt.id);
-          }
+          if(evt.groupId === gid) await idbDelete(evt.id);
         }
       } else {
-        // Just delete the single event
         await idbDelete(editingEventId);
       }
-      
-      // Create updated base event
-      const baseEvent = {
-        title, date, time, desc, color,
-        repeat, repeatEnd: repeatEnd || null,
-        important: false,
-        added: Date.now()
-      };
-      
-      await idbPut(baseEvent);
-      
-      // Generate repeating events if needed
-      if(repeat !== 'none' && repeatEnd){
-        const startDate = new Date(date);
-        const endDate = new Date(repeatEnd);
-        let currentDate = new Date(startDate);
-        
-        while(currentDate <= endDate){
-          currentDate = addDays(currentDate, getRepeatInterval(repeat));
-          if(currentDate <= endDate){
-            const dateStr = currentDate.toISOString().split('T')[0];
-            await idbPut({
-              ...baseEvent,
-              date: dateStr
-            });
-          }
+
+      const groupId = gid || ('g-' + Date.now() + '-' + Math.floor(Math.random()*10000));
+
+      // create instances for updated event (single or repeating)
+      if(repeat === 'none' || !repeatEnd){
+        await idbPut({
+          title, startDate, endDate, time, desc, color,
+          repeat, repeatEnd: repeatEnd || null,
+          important: false, added: Date.now(), groupId
+        });
+      } else {
+        const s = new Date(startDate);
+        const re = new Date(repeatEnd);
+        let cur = new Date(s);
+        while(cur <= re){
+          const sStr = cur.toISOString().split('T')[0];
+          const eDate = addDays(cur, duration);
+          const eStr = eDate.toISOString().split('T')[0];
+          await idbPut({
+            title, startDate: sStr, endDate: eStr, time, desc, color,
+            repeat, repeatEnd: repeatEnd || null,
+            important: false, added: Date.now(), groupId
+          });
+          cur = addDays(cur, getRepeatInterval(repeat));
         }
       }
-      
+
       cancelEdit();
     } else {
-      // Add new event
-      const baseEvent = {
-        title, date, time, desc, color,
-        repeat, repeatEnd: repeatEnd || null,
-        important: false,
-        added: Date.now()
-      };
-      
-      await idbPut(baseEvent);
-      
-      // Generate repeating events if needed
-      if(repeat !== 'none' && repeatEnd){
-        const startDate = new Date(date);
-        const endDate = new Date(repeatEnd);
-        let currentDate = new Date(startDate);
-        
-        while(currentDate <= endDate){
-          currentDate = addDays(currentDate, getRepeatInterval(repeat));
-          if(currentDate <= endDate){
-            const dateStr = currentDate.toISOString().split('T')[0];
-            await idbPut({
-              ...baseEvent,
-              date: dateStr
-            });
-          }
+      // Add new event(s)
+      const groupId = 'g-' + Date.now() + '-' + Math.floor(Math.random()*10000);
+      if(repeat === 'none' || !repeatEnd){
+        await idbPut({
+          title, startDate, endDate, time, desc, color,
+          repeat, repeatEnd: repeatEnd || null,
+          important: false, added: Date.now(), groupId
+        });
+      } else {
+        const s = new Date(startDate);
+        const re = new Date(repeatEnd);
+        let cur = new Date(s);
+        while(cur <= re){
+          const sStr = cur.toISOString().split('T')[0];
+          const eDate = addDays(cur, duration);
+          const eStr = eDate.toISOString().split('T')[0];
+          await idbPut({
+            title, startDate: sStr, endDate: eStr, time, desc, color,
+            repeat, repeatEnd: repeatEnd || null,
+            important: false, added: Date.now(), groupId
+          });
+          cur = addDays(cur, getRepeatInterval(repeat));
         }
       }
     }
