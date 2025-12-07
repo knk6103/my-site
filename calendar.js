@@ -67,6 +67,8 @@
   const eventTimeEl = document.getElementById('event-time');
   const eventDescEl = document.getElementById('event-desc');
   const eventColorEl = document.getElementById('event-color');
+  const eventRepeatEl = document.getElementById('event-repeat');
+  const eventRepeatEndEl = document.getElementById('event-repeat-end');
   const selectedDateDisplayEl = document.getElementById('selected-date-display');
   const eventsListEl = document.getElementById('events-list');
 
@@ -233,6 +235,7 @@
         events.slice(0, 2).forEach(event => {
           const eventTag = document.createElement('div');
           eventTag.className = 'event-tag';
+          eventTag.style.backgroundColor = getColorValue(event.color || 'blue');
           eventTag.style.borderLeftColor = getColorValue(event.color || 'blue');
           
           const eventText = document.createElement('span');
@@ -284,14 +287,37 @@
     const time = eventTimeEl.value || '';
     const desc = eventDescEl.value.trim();
     const color = eventColorEl.value;
+    const repeat = eventRepeatEl.value;
+    const repeatEnd = eventRepeatEndEl.value;
     
     if(!title || !date) return alert('Title and date are required');
     
-    await idbPut({
+    const baseEvent = {
       title, date, time, desc, color,
+      repeat, repeatEnd: repeatEnd || null,
       important: false,
       added: Date.now()
-    });
+    };
+    
+    await idbPut(baseEvent);
+    
+    // Generate repeating events if needed
+    if(repeat !== 'none' && repeatEnd){
+      const startDate = new Date(date);
+      const endDate = new Date(repeatEnd);
+      let currentDate = new Date(startDate);
+      
+      while(currentDate <= endDate){
+        currentDate = addDays(currentDate, getRepeatInterval(repeat));
+        if(currentDate <= endDate){
+          const dateStr = currentDate.toISOString().split('T')[0];
+          await idbPut({
+            ...baseEvent,
+            date: dateStr
+          });
+        }
+      }
+    }
     
     eventForm.reset();
     alert('Event added!');
@@ -300,6 +326,22 @@
     if(selectedDate) await renderEventsForDate(selectedDate);
     renderCalendar();
   });
+
+  function addDays(date, days){
+    const result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+  }
+
+  function getRepeatInterval(repeat){
+    const intervals = {
+      'daily': 1,
+      'weekly': 7,
+      'biweekly': 14,
+      'monthly': 30
+    };
+    return intervals[repeat] || 0;
+  }
 
   // Initialize
   (async function init(){

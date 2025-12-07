@@ -93,6 +93,20 @@
                     <option value="purple">Purple</option>
                   </select>
                 </label>
+                <label>
+                  Repeat
+                  <select id="event-repeat">
+                    <option value="none">None</option>
+                    <option value="daily">Daily</option>
+                    <option value="weekly">Weekly</option>
+                    <option value="biweekly">Every 2 weeks</option>
+                    <option value="monthly">Monthly</option>
+                  </select>
+                </label>
+                <label>
+                  Repeat End Date (Optional)
+                  <input id="event-repeat-end" type="date">
+                </label>
                 <div style="display:flex;gap:8px;margin-top:12px;">
                   <button type="submit" class="btn primary">Add Event</button>
                   <button type="reset" class="btn">Clear</button>

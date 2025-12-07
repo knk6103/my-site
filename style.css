@@ -878,16 +878,17 @@ main {
 }
 
 .event-tag {
-  font-size: 0.7rem;
-  padding: 3px 6px;
-  background: linear-gradient(135deg, rgba(11, 95, 165, 0.08), rgba(30, 144, 255, 0.05));
+  font-size: 0.65rem;
+  padding: 2px 6px;
+  background: var(--primary-blue);
   border-radius: 3px;
-  border-left: 2px solid var(--primary-blue);
+  border-left: 3px solid var(--primary-blue);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: var(--dark-text);
+  color: #fff;
   font-weight: 500;
+  letter-spacing: 0.3px;
 }
 
 .event-more {
