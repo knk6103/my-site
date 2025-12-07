@@ -62,6 +62,8 @@
   const categoryEl = document.getElementById('eq-category');
   const modelEl = document.getElementById('eq-model');
   const serialEl = document.getElementById('eq-serial');
+  const dateEl = document.getElementById('eq-date');
+  const dateUnknownEl = document.getElementById('eq-date-unknown');
   const quantityEl = document.getElementById('eq-quantity');
   const statusEl = document.getElementById('eq-status');
   const locationEl = document.getElementById('eq-location');
@@ -215,6 +217,19 @@
             content.appendChild(location);
           }
 
+          // Acquisition date or unknown
+          if(eq.dateUnknown){
+            const dateP = document.createElement('p');
+            dateP.className = 'equipment-date';
+            dateP.textContent = 'Acquired: Unknown';
+            content.appendChild(dateP);
+          } else if(eq.date){
+            const dateP = document.createElement('p');
+            dateP.className = 'equipment-date';
+            dateP.textContent = `Acquired: ${eq.date}`;
+            content.appendChild(dateP);
+          }
+
           if(eq.notes){
             const notes = document.createElement('p');
             notes.className = 'equipment-notes';
@@ -302,6 +317,8 @@
         eq.quantity = parseInt(quantityEl.value);
         eq.status = statusEl.value;
         eq.location = locationEl.value;
+        eq.date = dateUnknownEl.checked ? null : (dateEl.value || null);
+        eq.dateUnknown = !!dateUnknownEl.checked;
         eq.notes = notesEl.value;
         if(imageData) eq.image = imageData;
         await idbPut(eq);
@@ -314,6 +331,8 @@
         category: categoryEl.value,
         model: modelEl.value,
         serial: serialEl.value,
+        date: dateUnknownEl.checked ? null : (dateEl.value || null),
+        dateUnknown: !!dateUnknownEl.checked,
         quantity: parseInt(quantityEl.value),
         status: statusEl.value,
         location: locationEl.value,
