@@ -61,6 +61,7 @@
   const nameEl = document.getElementById('eq-name');
   const categoryEl = document.getElementById('eq-category');
   const modelEl = document.getElementById('eq-model');
+  const serialEl = document.getElementById('eq-serial');
   const quantityEl = document.getElementById('eq-quantity');
   const statusEl = document.getElementById('eq-status');
   const locationEl = document.getElementById('eq-location');
@@ -126,7 +127,8 @@
       const q = filter.search.toLowerCase();
       filtered = filtered.filter(e => 
         e.name.toLowerCase().includes(q) || 
-        (e.model && e.model.toLowerCase().includes(q))
+        (e.model && e.model.toLowerCase().includes(q)) ||
+        (e.serial && e.serial.toLowerCase().includes(q))
       );
     }
 
@@ -191,6 +193,13 @@
           model.className = 'equipment-model';
           model.textContent = eq.model || 'No specification';
           content.appendChild(model);
+
+          if(eq.serial){
+            const serial = document.createElement('p');
+            serial.className = 'equipment-serial';
+            serial.textContent = `S/N: ${eq.serial}`;
+            content.appendChild(serial);
+          }
 
           const meta = document.createElement('div');
           meta.className = 'equipment-meta';
@@ -259,6 +268,7 @@
     nameEl.value = eq.name;
     categoryEl.value = eq.category;
     modelEl.value = eq.model || '';
+    serialEl.value = eq.serial || '';
     quantityEl.value = eq.quantity;
     statusEl.value = eq.status;
     locationEl.value = eq.location || '';
@@ -298,6 +308,7 @@
         eq.name = name;
         eq.category = categoryEl.value;
         eq.model = modelEl.value;
+        eq.serial = serialEl.value;
         eq.quantity = parseInt(quantityEl.value);
         eq.status = statusEl.value;
         eq.location = locationEl.value;
@@ -312,6 +323,7 @@
         name, 
         category: categoryEl.value,
         model: modelEl.value,
+        serial: serialEl.value,
         quantity: parseInt(quantityEl.value),
         status: statusEl.value,
         location: locationEl.value,
