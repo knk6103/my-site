@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Calendar — NK (KNK)</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">메인으로 건너뛰기</a>
+
+  <header role="banner" class="site-header">
+    <div class="container header-inner">
+      <div class="logo-section">
+        <h1 class="site-title">NK (KNK)</h1>
+        <p class="site-subtitle">Advanced Solid State Laser Lab — Hanyang University</p>
+      </div>
+
+      <nav role="navigation" aria-label="주요 메뉴" class="main-nav">
+        <ul>
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="research.html" class="nav-link">Research</a></li>
+          <li><a href="calendar.html" class="nav-link">Calendar</a></li>
+          <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+
+      <button id="theme-toggle" class="theme-toggle" aria-pressed="false" aria-label="테마 전환">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="5"/>
+        </svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="main" role="main">
+    <section class="calendar-section" aria-labelledby="calendar-title">
+      <div class="container">
+        <h2 id="calendar-title">Lab Calendar</h2>
+
+        <div class="calendar-layout">
+          <!-- Left: Calendar View -->
+          <div class="calendar-view">
+            <div class="calendar-header">
+              <button id="prev-month" class="btn calendar-nav">◀ Prev</button>
+              <h3 id="month-year" class="calendar-title"></h3>
+              <button id="next-month" class="btn calendar-nav">Next ▶</button>
+            </div>
+            <div class="calendar-grid">
+              <div class="weekday">Sun</div>
+              <div class="weekday">Mon</div>
+              <div class="weekday">Tue</div>
+              <div class="weekday">Wed</div>
+              <div class="weekday">Thu</div>
+              <div class="weekday">Fri</div>
+              <div class="weekday">Sat</div>
+              <div id="calendar-days" class="calendar-days"></div>
+            </div>
+          </div>
+
+          <!-- Right: Event Management -->
+          <div class="calendar-sidebar">
+            <!-- Add Event Form -->
+            <div class="event-form-card">
+              <h3>Add Event</h3>
+              <form id="event-form">
+                <label>
+                  Title
+                  <input id="event-title" type="text" required placeholder="이벤트 제목">
+                </label>
+                <label>
+                  Date
+                  <input id="event-date" type="date" required>
+                </label>
+                <label>
+                  Time
+                  <input id="event-time" type="time">
+                </label>
+                <label>
+                  Description
+                  <textarea id="event-desc" placeholder="상세 설명 (선택)"></textarea>
+                </label>
+                <label>
+                  Color
+                  <select id="event-color">
+                    <option value="blue">Blue</option>
+                    <option value="green">Green</option>
+                    <option value="red">Red</option>
+                    <option value="yellow">Yellow</option>
+                    <option value="purple">Purple</option>
+                  </select>
+                </label>
+                <div style="display:flex;gap:8px;margin-top:12px;">
+                  <button type="submit" class="btn primary">Add Event</button>
+                  <button type="reset" class="btn">Clear</button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Events List for Selected Date -->
+            <div class="events-list-card">
+              <h3>Events</h3>
+              <div id="selected-date-display" class="muted" style="margin-bottom:8px;">Select a date</div>
+              <div id="events-list" class="events-list"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer role="contentinfo" class="site-footer">
+    <div class="container">
+      <p>© 2025 NK (KNK). Advanced Solid State Laser Lab — Hanyang University.</p>
+    </div>
+  </footer>
+
+  <script src="script.js" defer></script>
+  <script src="calendar.js" defer></script>
+</body>
+</html>
