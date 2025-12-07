@@ -391,8 +391,7 @@
     const repeat = eventRepeatEl.value;
     const repeatEnd = eventRepeatEndEl.value;
     
-    if(!title || !date) return alert('Title and date are required');
-    if(!startDate) return alert('Start date is required');
+    if(!title || !startDate) return alert('Title and start date are required');
 
     function daysBetween(a,b){
       const da = new Date(a + 'T00:00:00');
