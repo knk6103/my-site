@@ -1,0 +1,79 @@
+<!-- Helper: research content snippet copied from research.html for insertion -->
+<div class="container">
+  <h2 id="research-portal-title">Research — Papers & Patents</h2>
+  <div class="research-tools">
+    <div class="left-col">
+      <div class="upload-area">
+        <h3>Upload Papers / Patents</h3>
+        <p class="muted">업로드한 파일은 브라우저의 IndexedDB에 저장됩니다. 로컬에서만 이용 가능합니다.</p>
+        <input id="file-input" type="file" multiple accept=".pdf,.txt,.md" />
+        <div id="file-list" class="file-list" aria-live="polite"></div>
+      </div>
+    </div>
+
+    <div class="right-col">
+      <div class="search-panel">
+        <h3>AI-like Search</h3>
+        <input id="ai-query" placeholder="검색어를 입력하세요 (예: beam shaping aberration)" />
+        <div style="display:flex;gap:8px;margin-top:8px;">
+          <button id="run-search" class="btn primary">Search</button>
+          <button id="open-ai-prompt" class="btn">Generate AI Prompt</button>
+        </div>
+        <div id="search-results" class="result-list"></div>
+      </div>
+
+      <div class="ai-panel">
+        <h3>AI Prompt / Summary</h3>
+        <p class="muted">간단한 요약/AI 프롬프트를 생성해 복사할 수 있습니다. (외부 AI API는 연결되어 있지 않습니다.)</p>
+        <textarea id="ai-prompt" rows="6"></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px;">
+          <button id="copy-prompt" class="btn primary">Copy Prompt</button>
+          <button id="clear-prompt" class="btn">Clear</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Activities (summary + full list) -->
+  <div class="history-layout" style="margin-top:24px;">
+    <div class="history-summary-card">
+      <h3>Recent Activities</h3>
+      <div id="history-summary" class="history-summary"></div>
+      <p style="margin-top:8px;"><a href="research.html#tab-activities">View all activities</a></p>
+    </div>
+
+    <div class="history-form-card">
+      <h3 id="form-title">Add Activity</h3>
+      <form id="history-form">
+        <label>Title<input id="hist-title" type="text" required placeholder="Activity title"></label>
+        <label>Researcher<input id="hist-researcher" type="text" placeholder="Name (e.g. Kim, NK)"></label>
+        <label>Category
+          <select id="hist-category">
+            <option value="research">Research Project</option>
+            <option value="presentation">Conference / Presentation</option>
+            <option value="paper">Paper / Publication</option>
+            <option value="patent">Patent</option>
+            <option value="other">Other</option>
+          </select>
+        </label>
+        <label>Role<input id="hist-role" type="text" placeholder="PI / Co-author / Presenter"></label>
+        <label>Start Date<input id="hist-start" type="date" required></label>
+        <label>End Date<input id="hist-end" type="date"></label>
+        <label style="display:flex;gap:10px;align-items:center;"><input id="hist-ongoing" type="checkbox"> Ongoing</label>
+        <label>Status
+          <select id="hist-status">
+            <option value="ongoing">Ongoing</option>
+            <option value="completed">Completed</option>
+          </select>
+        </label>
+        <label>Description<textarea id="hist-desc" placeholder="Short description"></textarea></label>
+        <label>Attachment (PDF)<input id="hist-attach" type="file" accept="application/pdf"></label>
+        <div style="display:flex;gap:8px;margin-top:12px;">
+          <button type="submit" class="btn primary" id="form-submit-btn">Add</button>
+          <button type="reset" class="btn">Clear</button>
+          <button type="button" class="btn" id="form-cancel-btn" style="display:none;">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

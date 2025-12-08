@@ -22,7 +22,6 @@
           <li><a href="research.html" class="nav-link">Research</a></li>
           <li><a href="calendar.html" class="nav-link">Calendar</a></li>
           <li><a href="equipment.html" class="nav-link">Equipment</a></li>
-          <li><a href="history.html" class="nav-link">Activities</a></li>
           <li><a href="index.html#contact" class="nav-link">Contact</a></li>
         </ul>
       </nav>
@@ -41,46 +40,9 @@
   <main id="main" role="main">
     <section class="research-portal" aria-labelledby="research-portal-title">
       <div class="container">
-        <h2 id="research-portal-title">Research — Papers & Patents</h2>
+        <h2 id="research-portal-title">Activities & Project Timeline</h2>
 
-        <!-- Combined Research view: Papers (upload/search) followed by Activities timeline -->
-        <div id="tab-papers" class="tab-panel">
-          <div class="research-tools">
-            <div class="left-col">
-              <div class="upload-area">
-                <h3>Upload Papers / Patents</h3>
-                <p class="muted">업로드한 파일은 브라우저의 IndexedDB에 저장됩니다. 로컬에서만 이용 가능합니다.</p>
-                <input id="file-input" type="file" multiple accept=".pdf,.txt,.md" />
-                <div id="file-list" class="file-list" aria-live="polite"></div>
-              </div>
-            </div>
-
-            <div class="right-col">
-              <div class="search-panel">
-                <h3>AI-like Search</h3>
-                <input id="ai-query" placeholder="검색어를 입력하세요 (예: beam shaping aberration)" />
-                <div style="display:flex;gap:8px;margin-top:8px;">
-                  <button id="run-search" class="btn primary">Search</button>
-                  <button id="open-ai-prompt" class="btn">Generate AI Prompt</button>
-                </div>
-                <div id="search-results" class="result-list"></div>
-              </div>
-
-              <div class="ai-panel">
-                <h3>AI Prompt / Summary</h3>
-                <p class="muted">간단한 요약/AI 프롬프트를 생성해 복사할 수 있습니다. (외부 AI API는 연결되어 있지 않습니다.)</p>
-                <textarea id="ai-prompt" rows="6"></textarea>
-                <div style="display:flex;gap:8px;margin-top:8px;">
-                  <button id="copy-prompt" class="btn primary">Copy Prompt</button>
-                  <button id="clear-prompt" class="btn">Clear</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Activities section (moved below Papers) -->
-        <div id="tab-activities" class="tab-panel">
+        <!-- Activities section -->
           <div class="history-layout" style="margin-top:24px;">
             <div class="history-form-card">
               <h3 id="form-title">Add Activity</h3>

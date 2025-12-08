@@ -59,8 +59,9 @@
       </div>
     </section>
 
-    <!-- 연구 분야 섹션 -->
+    <!-- 연구 분야 섹션 (통합된 Research: Papers + Activities 요약/폼) -->
     <section id="research" class="research" aria-labelledby="research-title">
+      <!-- Research areas (kept) -->
       <div class="container">
         <h2 id="research-title">Research Areas</h2>
         <div class="research-grid">
@@ -107,6 +108,49 @@
           </article>
         </div>
       </div>
+
+      <!-- Insert combined Research content (upload/search + activities summary & form) -->
+      <div class="container" style="margin-top:24px;">
+        <h2>Research — Papers & Activities on Main</h2>
+        
+        <!-- Research summary (read-only) -->
+        <div class="research-summary" style="margin-bottom:24px;">
+          <h3>Latest Research Activities</h3>
+          <div id="history-summary" class="history-summary" style="min-height:100px;"></div>
+          <p style="margin-top:8px;"><a href="research.html">View full Activities page →</a></p>
+        </div>
+
+        <!-- Quick add Activity form -->
+        <div class="quick-add-activity" style="background:#f5f5f5;padding:20px;border-radius:8px;">
+          <h3 id="form-title">Quick Add Activity</h3>
+          <form id="history-form">
+            <label>Title<input id="hist-title" type="text" required placeholder="Activity title"></label>
+            <label>Researcher<input id="hist-researcher" type="text" placeholder="Name (e.g. Kim, NK)"></label>
+            <label>Category
+              <select id="hist-category">
+                <option value="research">Research Project</option>
+                <option value="presentation">Conference / Presentation</option>
+                <option value="paper">Paper / Publication</option>
+                <option value="patent">Patent</option>
+                <option value="other">Other</option>
+              </select>
+            </label>
+            <label>Start Date<input id="hist-start" type="date" required></label>
+            <label>End Date<input id="hist-end" type="date"></label>
+            <label style="display:flex;gap:10px;align-items:center;"><input id="hist-ongoing" type="checkbox"> Ongoing</label>
+            <label>Status
+              <select id="hist-status">
+                <option value="ongoing">Ongoing</option>
+                <option value="completed">Completed</option>
+              </select>
+            </label>
+            <div style="display:flex;gap:8px;margin-top:12px;">
+              <button type="submit" class="btn primary" id="form-submit-btn">Add Activity</button>
+              <button type="reset" class="btn">Clear</button>
+            </div>
+          </form>
+        </div>
+      </div>
     </section>
 
     <!-- 연락처 섹션 -->
@@ -147,6 +191,9 @@
     </div>
   </footer>
 
+  <script src="https://unpkg.com/fuse.js@6.6.2/dist/fuse.min.js"></script>
   <script src="script.js" defer></script>
+  <script src="research.js" defer></script>
+  <script src="history.js" defer></script>
 </body>
 </html>
