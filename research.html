@@ -148,6 +148,9 @@
     
     // Guard content: only show to authenticated users
     document.addEventListener('DOMContentLoaded', ()=>{
+      // Ensure auth UI is updated first
+      if(window.labAuth) window.labAuth.updateAuthUI();
+      
       const main = document.querySelector('main');
       if(!window.labAuth || !window.labAuth.isAuthenticated()){
         if(main) main.style.display = 'none';
