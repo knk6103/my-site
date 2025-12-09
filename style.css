@@ -777,9 +777,10 @@ main {
 
 .calendar-layout {
   display: grid;
-  grid-template-columns: 1.2fr 380px;
-  gap: 40px;
+  grid-template-columns: 1fr minmax(300px, 380px);
+  gap: 24px;
   align-items: start;
+  max-width: 1400px;
 }
 
 .calendar-view {
@@ -1008,6 +1009,13 @@ main {
   color: var(--dark-text);
 }
 
+.form-button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
 .event-form-card input, .event-form-card textarea, .event-form-card select {
   width: 100%;
   padding: 10px 12px;
@@ -1018,6 +1026,7 @@ main {
   color: var(--dark-text);
   font-size: 0.9rem;
   transition: all 0.3s ease;
+  box-sizing: border-box;
 }
 
 .event-form-card input:focus, .event-form-card textarea:focus, .event-form-card select:focus {
