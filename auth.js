@@ -15,9 +15,15 @@
   function getApprovedEmails(){
     try {
       const stored = localStorage.getItem(APPROVED_EMAILS_KEY);
-      return stored ? JSON.parse(stored) : [];
+      if(!stored){
+        // Initialize with admin email on first run
+        const defaultEmails = [ADMIN_EMAIL.toLowerCase()];
+        localStorage.setItem(APPROVED_EMAILS_KEY, JSON.stringify(defaultEmails));
+        return defaultEmails;
+      }
+      return JSON.parse(stored);
     } catch(_) {
-      return [];
+      return [ADMIN_EMAIL.toLowerCase()];
     }
   }
 
