@@ -532,7 +532,7 @@
   // Initialize
   (async function init(){
     await openDB();
-    render();
+    renderCalendar();
 
     // Select today
     const today = new Date();
