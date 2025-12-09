@@ -81,7 +81,7 @@
       sessionStorage.removeItem(AUTH_EMAIL_KEY);
       currentUser = null;
       updateAuthUI();
-      if(typeof updateSettingsNav === 'function') updateSettingsNav();
+      updateSettingsNav();
     } catch(_) {}
   }
 
@@ -204,6 +204,7 @@
     getApprovedEmails,
     setApprovedEmails,
     updateAuthUI,
+    updateSettingsNav,
     isAdminUser
   };
 })();
