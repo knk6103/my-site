@@ -209,6 +209,18 @@
     console.error('Auth init error:', e);
   }
 
+  // Also ensure UI is updated shortly after script load
+  // (in case DOM elements aren't ready yet)
+  setTimeout(()=>{
+    try {
+      currentUser = getCurrentUser();
+      updateAuthUI();
+      updateSettingsNav();
+    } catch(e) {
+      console.error('Auth delayed init error:', e);
+    }
+  }, 100);
+
   // Expose to global
   window.labAuth = {
     isAuthenticated,
