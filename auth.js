@@ -186,9 +186,13 @@
   });
 
   // Initialize UI immediately for pages that load auth.js synchronously
-  currentUser = getCurrentUser();
-  updateAuthUI();
-  updateSettingsNav();
+  try {
+    currentUser = getCurrentUser();
+    updateAuthUI();
+    updateSettingsNav();
+  } catch(e) {
+    console.error('Auth init error:', e);
+  }
 
   // Expose to global
   window.labAuth = {
