@@ -423,6 +423,18 @@ main {
 .history-actions { display:flex; gap:8px; margin-top:8px; }
 .history-attach a { color:var(--primary-blue); text-decoration:underline; }
 
+/* Timeline filter buttons */
+.timeline-filter-btn:hover {
+  border-color: var(--primary-blue);
+  color: var(--primary-blue);
+}
+
+.timeline-filter-btn.active {
+  background: var(--primary-blue);
+  color: white;
+  border-color: var(--primary-blue);
+}
+
 .news-item {
   display: flex;
   gap: 24px;

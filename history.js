@@ -83,45 +83,131 @@
     // sort by start date desc
     all.sort((a,b)=> (b.start || b.added) > (a.start || a.added) ? 1 : -1);
     listEl.innerHTML = '';
-    if(all.length === 0){ listEl.innerHTML = '<p class="muted">No activities yet</p>'; return; }
+    if(all.length === 0){ 
+      listEl.innerHTML = '<div style="text-align:center;padding:40px 20px;color:var(--light-text);"><div style="font-size:2rem;margin-bottom:12px;">📭</div><p>No activities yet. Create your first activity!</p></div>';
+      return; 
+    }
+
+    const categoryMap = {
+      research: '🔬',
+      presentation: '🎤',
+      paper: '📄',
+      patent: '🏆',
+      other: '📌'
+    };
 
     all.forEach(item => {
       const card = document.createElement('div');
       card.className = 'history-card';
-      const header = document.createElement('div'); header.className = 'history-card-header';
-      const title = document.createElement('h4'); title.textContent = item.title;
-      const meta = document.createElement('div'); meta.className = 'history-meta';
-      const who = document.createElement('span'); who.className = 'history-who'; who.textContent = item.researcher || '';
-      const cat = document.createElement('span'); cat.className = 'history-cat'; cat.textContent = getCategoryLabel(item.category);
-      meta.appendChild(who); meta.appendChild(document.createTextNode(' · ')); meta.appendChild(cat);
-      header.appendChild(title); header.appendChild(meta);
+      card.style.cssText = `border: 1px solid var(--border-color); border-radius: 8px; padding: 18px; background: var(--surface-bg); transition: all 0.3s ease; border-left: 4px solid ${item.status === 'completed' ? '#22c55e' : 'var(--primary-blue)'}; opacity: ${item.status === 'completed' ? '0.85' : '1'};`;
+      
+      const header = document.createElement('div');
+      header.style.cssText = 'display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 12px;';
+      
+      const title = document.createElement('h4');
+      title.textContent = item.title;
+      title.style.cssText = 'font-size: 1.05rem; font-weight: 600; color: var(--dark-text); margin: 0;';
+      
+      const badges = document.createElement('div');
+      badges.style.cssText = 'display: flex; gap: 8px; flex-wrap: wrap;';
+      
+      // Category badge
+      const catBadge = document.createElement('span');
+      catBadge.textContent = `${categoryMap[item.category] || '📌'} ${getCategoryLabel(item.category)}`;
+      catBadge.style.cssText = 'display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 500; background: rgba(11, 95, 165, 0.1); color: var(--primary-blue);';
+      badges.appendChild(catBadge);
+      
+      // Status badge
+      const statusBadge = document.createElement('span');
+      statusBadge.textContent = item.status === 'completed' ? '✓ Completed' : '🔄 Ongoing';
+      statusBadge.style.cssText = `display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 500; background: ${item.status === 'completed' ? 'rgba(34, 197, 94, 0.1)' : 'rgba(245, 158, 11, 0.1)'}; color: ${item.status === 'completed' ? '#15803d' : '#b45309'};`;
+      badges.appendChild(statusBadge);
+      
+      header.appendChild(title);
+      header.appendChild(badges);
 
-      const body = document.createElement('div'); body.className = 'history-body';
-      const role = document.createElement('p'); role.className = 'history-role'; role.textContent = item.role ? `Role: ${item.role}` : '';
-      const range = document.createElement('p'); range.className = 'history-range';
-      const start = item.start || '';
-      const end = item.ongoing ? 'Ongoing' : (item.end || '');
-      range.textContent = start ? (end ? `${start} — ${end}` : start) : '';
-      const status = document.createElement('p'); status.className = 'history-status'; status.textContent = `Status: ${item.status || 'ongoing'}`;
-      const desc = document.createElement('p'); desc.className = 'history-desc'; desc.textContent = item.desc || '';
-      body.appendChild(role); body.appendChild(range); body.appendChild(status); if(item.desc) body.appendChild(desc);
-
-      if(item.attach){
-        const aWrap = document.createElement('div'); aWrap.className = 'history-attach';
-        const aLink = document.createElement('a'); aLink.href = item.attach; aLink.target = '_blank'; aLink.textContent = 'View attachment (PDF)';
-        aWrap.appendChild(aLink); body.appendChild(aWrap);
+      const meta = document.createElement('div');
+      meta.style.cssText = 'display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 0.9rem; color: var(--light-text); margin-bottom: 12px;';
+      
+      if(item.researcher) {
+        const researcherItem = document.createElement('div');
+        researcherItem.textContent = `👤 ${item.researcher}`;
+        meta.appendChild(researcherItem);
+      }
+      
+      if(item.role) {
+        const roleItem = document.createElement('div');
+        roleItem.textContent = `🎯 Role: ${item.role}`;
+        meta.appendChild(roleItem);
+      }
+      
+      if(item.start || item.end) {
+        const dateItem = document.createElement('div');
+        const startStr = item.start || '?';
+        const endStr = item.ongoing ? 'Ongoing' : (item.end || 'TBD');
+        dateItem.textContent = `📅 ${startStr} → ${endStr}`;
+        meta.appendChild(dateItem);
       }
 
-      const actions = document.createElement('div'); actions.className = 'history-actions';
-      const editBtn = document.createElement('button'); editBtn.className = 'btn btn-small'; editBtn.textContent = 'Edit';
-      editBtn.addEventListener('click', ()=> editItem(item));
-      const delBtn = document.createElement('button'); delBtn.className = 'btn btn-small'; delBtn.textContent = 'Delete';
-      delBtn.addEventListener('click', async ()=>{ if(confirm('Delete this activity?')){ await idbDelete(item.id); await renderList(); } });
-      const toggleBtn = document.createElement('button'); toggleBtn.className = 'btn btn-small'; toggleBtn.textContent = item.status === 'completed' ? 'Mark Ongoing' : 'Mark Completed';
-      toggleBtn.addEventListener('click', async ()=>{ item.status = item.status === 'completed' ? 'ongoing' : 'completed'; if(item.status === 'completed'){ item.ongoing = false; } await idbPut(item); await renderList(); });
-      actions.appendChild(editBtn); actions.appendChild(delBtn); actions.appendChild(toggleBtn);
+      const body = document.createElement('div');
+      body.style.cssText = 'margin-bottom: 12px;';
+      
+      if(item.desc) {
+        const desc = document.createElement('p');
+        desc.textContent = item.desc;
+        desc.style.cssText = 'color: var(--medium-text); margin: 0 0 12px 0; line-height: 1.5;';
+        body.appendChild(desc);
+      }
 
-      card.appendChild(header); card.appendChild(body); card.appendChild(actions);
+      if(item.attach){
+        const aWrap = document.createElement('div');
+        aWrap.style.cssText = 'margin-bottom: 12px;';
+        const aLink = document.createElement('a');
+        aLink.href = item.attach;
+        aLink.target = '_blank';
+        aLink.textContent = '📎 View Attachment (PDF)';
+        aLink.style.cssText = 'display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; background: rgba(11, 95, 165, 0.1); border-radius: 6px; color: var(--primary-blue); text-decoration: none; font-size: 0.9rem; transition: all 0.2s;';
+        aWrap.appendChild(aLink);
+        body.appendChild(aWrap);
+      }
+
+      const actions = document.createElement('div');
+      actions.style.cssText = 'display: flex; gap: 6px; padding-top: 12px; border-top: 1px solid var(--border-color);';
+      
+      const editBtn = document.createElement('button');
+      editBtn.textContent = '✎ Edit';
+      editBtn.style.cssText = 'padding: 6px 10px; font-size: 0.85rem; border: none; background: transparent; cursor: pointer; border-radius: 4px; color: #0066cc; transition: all 0.2s;';
+      editBtn.addEventListener('click', ()=> editItem(item));
+      editBtn.addEventListener('mouseover', (e) => e.target.style.background = 'rgba(0, 102, 204, 0.1)');
+      editBtn.addEventListener('mouseout', (e) => e.target.style.background = 'transparent');
+      
+      const delBtn = document.createElement('button');
+      delBtn.textContent = '🗑 Delete';
+      delBtn.style.cssText = 'padding: 6px 10px; font-size: 0.85rem; border: none; background: transparent; cursor: pointer; border-radius: 4px; color: #dc2626; transition: all 0.2s;';
+      delBtn.addEventListener('click', async ()=>{ if(confirm('Delete this activity?')){ await idbDelete(item.id); await renderList(); } });
+      delBtn.addEventListener('mouseover', (e) => e.target.style.background = 'rgba(220, 38, 38, 0.1)');
+      delBtn.addEventListener('mouseout', (e) => e.target.style.background = 'transparent');
+      
+      const toggleBtn = document.createElement('button');
+      toggleBtn.textContent = item.status === 'completed' ? '↩ Mark Ongoing' : '✓ Mark Completed';
+      toggleBtn.style.cssText = 'padding: 6px 10px; font-size: 0.85rem; border: none; background: transparent; cursor: pointer; border-radius: 4px; color: var(--primary-blue); transition: all 0.2s;';
+      toggleBtn.addEventListener('click', async ()=>{ 
+        item.status = item.status === 'completed' ? 'ongoing' : 'completed'; 
+        if(item.status === 'completed'){ item.ongoing = false; } 
+        await idbPut(item); 
+        await renderList(); 
+      });
+      toggleBtn.addEventListener('mouseover', (e) => e.target.style.background = 'rgba(11, 95, 165, 0.1)');
+      toggleBtn.addEventListener('mouseout', (e) => e.target.style.background = 'transparent');
+      
+      actions.appendChild(editBtn);
+      actions.appendChild(toggleBtn);
+      actions.appendChild(delBtn);
+
+      card.appendChild(header);
+      card.appendChild(meta);
+      card.appendChild(body);
+      card.appendChild(actions);
       listEl.appendChild(card);
     });
   }
@@ -137,11 +223,13 @@
     ongoingEl.checked = !!item.ongoing;
     statusEl.value = item.status || (item.ongoing ? 'ongoing' : 'completed');
     descEl.value = item.desc || '';
-    formTitleEl.textContent = 'Edit Activity'; submitBtn.textContent = 'Update'; cancelBtn.style.display = 'inline-block';
-    document.querySelector('.history-form-card').scrollIntoView({behavior:'smooth'});
+    formTitleEl.textContent = 'Edit Activity'; 
+    submitBtn.textContent = 'Update'; 
+    cancelBtn.style.display = 'inline-block';
+    document.querySelector('div[style*="position: sticky"]').scrollIntoView({behavior:'smooth'});
   }
 
-  function cancelEdit(){ editingId = null; form.reset(); formTitleEl.textContent = 'Add Activity'; submitBtn.textContent = 'Add'; cancelBtn.style.display = 'none'; }
+  function cancelEdit(){ editingId = null; form.reset(); formTitleEl.textContent = 'New Activity'; submitBtn.textContent = 'Add Activity'; cancelBtn.style.display = 'none'; }
 
   form.addEventListener('submit', async (ev)=>{
     ev.preventDefault();

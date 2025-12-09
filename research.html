@@ -38,50 +38,115 @@
   </header>
 
   <main id="main" role="main">
+    <!-- Research Hero Section -->
+    <section class="hero" aria-labelledby="research-hero-title" style="background: linear-gradient(135deg, var(--primary-blue) 0%, #0a4a8a 100%); color: white; padding: 60px 0; margin-bottom: 40px;">
+      <div class="container">
+        <h2 id="research-hero-title" class="hero-title" style="color: white; margin-bottom: 16px;">Research Activities & Project Timeline</h2>
+        <p style="font-size: 1.05rem; opacity: 0.95; max-width: 700px; line-height: 1.6;">
+          Track and document research projects, presentations, publications, and patents. Monitor project status from inception through completion.
+        </p>
+      </div>
+    </section>
+
     <section class="research-portal" aria-labelledby="research-portal-title">
       <div class="container">
-        <h2 id="research-portal-title">Activities & Project Timeline</h2>
+        <!-- Activities Container: 2-column layout -->
+        <div style="display: grid; grid-template-columns: 380px 1fr; gap: 32px; align-items: start;">
+          
+          <!-- Left: Add Activity Form Card -->
+          <div style="background: var(--light-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 28px; position: sticky; top: 100px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+            <div style="margin-bottom: 24px; border-bottom: 2px solid var(--primary-blue); padding-bottom: 16px;">
+              <h3 id="form-title" style="font-size: 1.2rem; margin-bottom: 4px; color: var(--dark-text);">New Activity</h3>
+              <p style="font-size: 0.9rem; color: var(--light-text); margin: 0;">Document research progress</p>
+            </div>
 
-        <!-- Activities section -->
-          <div class="history-layout" style="margin-top:24px;">
-            <div class="history-form-card">
-              <h3 id="form-title">Add Activity</h3>
-              <form id="history-form">
-                <label>Title<input id="hist-title" type="text" required placeholder="Activity title"></label>
-                <label>Researcher<input id="hist-researcher" type="text" placeholder="Name (e.g. Kim, NK)"></label>
-                <label>Category
-                  <select id="hist-category">
-                    <option value="research">Research Project</option>
-                    <option value="presentation">Conference / Presentation</option>
-                    <option value="paper">Paper / Publication</option>
-                    <option value="patent">Patent</option>
-                    <option value="other">Other</option>
-                  </select>
-                </label>
-                <label>Role<input id="hist-role" type="text" placeholder="PI / Co-author / Presenter"></label>
-                <label>Start Date<input id="hist-start" type="date" required></label>
-                <label>End Date<input id="hist-end" type="date"></label>
-                <label style="display:flex;gap:10px;align-items:center;"><input id="hist-ongoing" type="checkbox"> Ongoing</label>
-                <label>Status
-                  <select id="hist-status">
-                    <option value="ongoing">Ongoing</option>
-                    <option value="completed">Completed</option>
-                  </select>
-                </label>
-                <label>Description<textarea id="hist-desc" placeholder="Short description"></textarea></label>
-                <label>Attachment (PDF)<input id="hist-attach" type="file" accept="application/pdf"></label>
-                <div style="display:flex;gap:8px;margin-top:12px;">
-                  <button type="submit" class="btn primary" id="form-submit-btn">Add</button>
-                  <button type="reset" class="btn">Clear</button>
-                  <button type="button" class="btn" id="form-cancel-btn" style="display:none;">Cancel</button>
+            <form id="history-form" style="display: flex; flex-direction: column; gap: 14px;">
+              <div>
+                <label style="display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 6px; color: var(--dark-text);">Title *</label>
+                <input id="hist-title" type="text" required placeholder="e.g., Beam Shaping Study Phase 2" 
+                  style="width: 100%; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 6px; background: var(--surface-bg); color: var(--dark-text); font-size: 0.95rem; box-sizing: border-box; transition: border-color 0.2s;" />
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div>
+                  <label style="display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 6px; color: var(--dark-text);">Researcher</label>
+                  <input id="hist-researcher" type="text" placeholder="Your name" 
+                    style="width: 100%; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 6px; background: var(--surface-bg); color: var(--dark-text); font-size: 0.95rem; box-sizing: border-box;" />
                 </div>
-              </form>
+                <div>
+                  <label style="display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 6px; color: var(--dark-text);">Role</label>
+                  <input id="hist-role" type="text" placeholder="PI, Co-author, etc." 
+                    style="width: 100%; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 6px; background: var(--surface-bg); color: var(--dark-text); font-size: 0.95rem; box-sizing: border-box;" />
+                </div>
+              </div>
+
+              <div>
+                <label style="display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 6px; color: var(--dark-text);">Category *</label>
+                <select id="hist-category" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 6px; background: var(--surface-bg); color: var(--dark-text); font-size: 0.95rem; box-sizing: border-box;">
+                  <option value="research">Research Project</option>
+                  <option value="presentation">Conference / Presentation</option>
+                  <option value="paper">Paper / Publication</option>
+                  <option value="patent">Patent</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div>
+                  <label style="display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 6px; color: var(--dark-text);">Start Date *</label>
+                  <input id="hist-start" type="date" required style="width: 100%; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 6px; background: var(--surface-bg); color: var(--dark-text); font-size: 0.95rem; box-sizing: border-box;" />
+                </div>
+                <div>
+                  <label style="display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 6px; color: var(--dark-text);">End Date</label>
+                  <input id="hist-end" type="date" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 6px; background: var(--surface-bg); color: var(--dark-text); font-size: 0.95rem; box-sizing: border-box;" />
+                </div>
+              </div>
+
+              <div>
+                <label style="display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 6px; color: var(--dark-text);">Status</label>
+                <select id="hist-status" style="width: 100%; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 6px; background: var(--surface-bg); color: var(--dark-text); font-size: 0.95rem; box-sizing: border-box;">
+                  <option value="ongoing">Ongoing</option>
+                  <option value="completed">Completed</option>
+                </select>
+              </div>
+
+              <div style="display: flex; align-items: center; gap: 10px; margin: 8px 0;">
+                <input id="hist-ongoing" type="checkbox" style="width: 18px; height: 18px; cursor: pointer; accent-color: var(--primary-blue);" />
+                <label for="hist-ongoing" style="font-size: 0.95rem; cursor: pointer; color: var(--dark-text);">Mark as ongoing</label>
+              </div>
+
+              <div>
+                <label style="display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 6px; color: var(--dark-text);">Description</label>
+                <textarea id="hist-desc" placeholder="Brief description of the activity..." rows="3" 
+                  style="width: 100%; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 6px; background: var(--surface-bg); color: var(--dark-text); font-size: 0.95rem; box-sizing: border-box; resize: vertical; font-family: inherit;"></textarea>
+              </div>
+
+              <div>
+                <label style="display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 6px; color: var(--dark-text);">Attachment (PDF)</label>
+                <input id="hist-attach" type="file" accept="application/pdf" style="width: 100%; padding: 8px; border: 1px solid var(--border-color); border-radius: 6px; background: var(--surface-bg); font-size: 0.95rem; box-sizing: border-box;" />
+                <p style="font-size: 0.85rem; color: var(--light-text); margin-top: 4px;">Optional: upload related documents</p>
+              </div>
+
+              <div style="display: flex; gap: 8px; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border-color);">
+                <button type="submit" class="btn primary" id="form-submit-btn" style="flex: 1;">Add Activity</button>
+                <button type="reset" class="btn" style="flex: 1;">Clear</button>
+                <button type="button" class="btn" id="form-cancel-btn" style="display: none; flex: 1;">Cancel</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Right: Activity Timeline -->
+          <div style="background: var(--light-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 28px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 2px solid var(--primary-blue);">
+              <h3 id="research-portal-title" style="font-size: 1.2rem; margin: 0; color: var(--dark-text);">Activity Timeline</h3>
+              <div style="display: flex; gap: 8px;">
+                <button class="timeline-filter-btn active" data-filter="all" style="padding: 6px 14px; border: 1px solid var(--border-color); background: transparent; border-radius: 20px; font-size: 0.9rem; cursor: pointer; transition: all 0.2s;">All</button>
+                <button class="timeline-filter-btn" data-filter="ongoing" style="padding: 6px 14px; border: 1px solid var(--border-color); background: transparent; border-radius: 20px; font-size: 0.9rem; cursor: pointer; transition: all 0.2s;">Ongoing</button>
+                <button class="timeline-filter-btn" data-filter="completed" style="padding: 6px 14px; border: 1px solid var(--border-color); background: transparent; border-radius: 20px; font-size: 0.9rem; cursor: pointer; transition: all 0.2s;">Completed</button>
+              </div>
             </div>
 
-            <div class="history-list-card">
-              <h3>Activity Timeline</h3>
-              <div id="history-list" class="history-list"></div>
-            </div>
+            <div id="history-list" class="history-list" style="display: flex; flex-direction: column; gap: 12px;"></div>
           </div>
         </div>
       </div>
