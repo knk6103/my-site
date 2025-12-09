@@ -36,6 +36,14 @@
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
         </svg>
       </button>
+
+      <div class="header-auth">
+        <span id="auth-user-status" class="auth-user-status"></span>
+        <div id="auth-signin-container" class="auth-signin-container">
+          <button type="button" class="btn" id="auth-signin-btn">Sign in</button>
+        </div>
+        <button type="button" class="btn" id="auth-signout-btn" style="display:none;">Sign out</button>
+      </div>
     </div>
   </header>
 
@@ -160,6 +168,7 @@
   </footer>
 
   <script src="https://unpkg.com/fuse.js@6.6.2/dist/fuse.min.js"></script>
+  <script src="auth.js" defer></script>
   <script src="script.js" defer></script>
   <script src="research.js" defer></script>
   <script src="history.js" defer></script>

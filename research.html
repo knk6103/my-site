@@ -34,6 +34,14 @@
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
         </svg>
       </button>
+
+      <div class="header-auth">
+        <span id="auth-user-status" class="auth-user-status"></span>
+        <div id="auth-signin-container" class="auth-signin-container">
+          <button type="button" class="btn" id="auth-signin-btn">Sign in</button>
+        </div>
+        <button type="button" class="btn" id="auth-signout-btn" style="display:none;">Sign out</button>
+      </div>
     </div>
   </header>
 
@@ -42,14 +50,17 @@
       <div class="container">
         <h2 id="research-title">Research Activities & Timeline</h2>
 
-        <div class="auth-bar" aria-label="쓰기 권한 제어">
-          <span id="auth-status" class="auth-status">Read-only</span>
-          <div class="auth-actions">
-            <button type="button" class="btn" id="auth-signin-btn">Sign in</button>
-            <button type="button" class="btn" id="auth-signout-btn" style="display:none;">Sign out</button>
+        <details class="admin-section">
+          <summary>Admin: Manage Access</summary>
+          <div class="admin-controls">
+            <label>
+              Approved Emails (one per line):
+              <textarea id="admin-emails" placeholder="user1@example.com&#10;user2@example.com"></textarea>
+            </label>
+            <button type="button" class="btn primary" id="admin-save-emails">Save</button>
+            <p class="admin-note">Only these emails can access the system.</p>
           </div>
-        </div>
-
+        </details>
         <!-- Activities section -->
         <div class="history-layout" style="margin-top:24px;">
           <div class="history-form-card">
@@ -141,16 +152,20 @@
   </footer>
 
   <script src="https://unpkg.com/fuse.js@6.6.2/dist/fuse.min.js"></script>
+  <script src="auth.js" defer></script>
   <script src="script.js" defer></script>
   <script src="research.js" defer></script>
   <script src="history.js" defer></script>
+  <script src="admin.js" defer></script>
   <script>
-    // 임시 패스프레이즈를 여기서 설정하세요. 공개 코드라 보안용이 아니며, 단순 보호용입니다.
-    // 예: window.WRITE_PASSPHRASE = 'lab-note-2025';
-    window.WRITE_PASSPHRASE = '';
-  </script>
-  <script>
-    // No tab switching — combined view. Keep research and history scripts loaded.
+    // Guard content: only show to authenticated users
+    window.addEventListener('DOMContentLoaded', ()=>{
+      const main = document.querySelector('main');
+      if(!window.labAuth.isAuthenticated()){
+        main.style.display = 'none';
+        window.labAuth.requireAuth();
+      }
+    });
   </script>
 </body>
 </html>
