@@ -2,7 +2,7 @@
 
 (function(){
   // Set this to your master passphrase (change it!)
-  const MASTER_PASSPHRASE = 'admin123';
+  const MASTER_PASSPHRASE = 'my-lab-2025';
 
   window.addEventListener('DOMContentLoaded', ()=>{
     const emailsEl = document.getElementById('admin-emails');
