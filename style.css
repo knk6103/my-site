@@ -1587,6 +1587,28 @@ main {
   border: 1px solid var(--border-color);
   box-shadow: 0 2px 12px rgba(11, 95, 165, 0.08);
 }
+.history-filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.history-filters input,
+.history-filters select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background: #fff;
+  font-size: 0.95rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.history-filters input:focus,
+.history-filters select:focus {
+  outline: none;
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 3px rgba(11, 95, 165, 0.1);
+}
 
 .equipment-search-card h3 {
   margin: 0 0 16px 0;

@@ -63,6 +63,13 @@
   const formTitleEl = document.getElementById('form-title');
   const submitBtn = document.getElementById('form-submit-btn');
   const cancelBtn = document.getElementById('form-cancel-btn');
+  const searchEl = document.getElementById('history-search');
+  const filterCategoryEl = document.getElementById('history-filter-category');
+  const filterStatusEl = document.getElementById('history-filter-status');
+
+  let filterText = '';
+  let filterCategory = '';
+  let filterStatus = '';
 
   function getCategoryLabel(k){
     const map = { research: 'Research', presentation: 'Presentation', paper: 'Paper', patent: 'Patent', other: 'Other' };
@@ -83,10 +90,19 @@
     const all = await idbGetAll();
     // sort by start date desc
     all.sort((a,b)=> (b.start || b.added) > (a.start || a.added) ? 1 : -1);
-    listEl.innerHTML = '';
-    if(all.length === 0){ listEl.innerHTML = '<p class="muted">No activities yet</p>'; return; }
+    const text = filterText.toLowerCase();
+    const filtered = all.filter(item => {
+      if(filterCategory && item.category !== filterCategory) return false;
+      if(filterStatus && item.status !== filterStatus) return false;
+      if(!text) return true;
+      const hay = `${item.title || ''} ${item.desc || ''} ${item.researcher || ''} ${item.role || ''}`.toLowerCase();
+      return hay.includes(text);
+    });
 
-    all.forEach(item => {
+    listEl.innerHTML = '';
+    if(filtered.length === 0){ listEl.innerHTML = '<p class="muted">No activities yet</p>'; return; }
+
+    filtered.forEach(item => {
       const card = document.createElement('div');
       card.className = 'history-card';
       const header = document.createElement('div'); header.className = 'history-card-header';
@@ -252,6 +268,16 @@
 
   if(cancelBtn){
     cancelBtn.addEventListener('click', cancelEdit);
+  }
+
+  if(searchEl){
+    searchEl.addEventListener('input', ()=>{ filterText = searchEl.value.trim(); renderList(); });
+  }
+  if(filterCategoryEl){
+    filterCategoryEl.addEventListener('change', ()=>{ filterCategory = filterCategoryEl.value; renderList(); });
+  }
+  if(filterStatusEl){
+    filterStatusEl.addEventListener('change', ()=>{ filterStatus = filterStatusEl.value; renderList(); });
   }
 
   // Initialize sample data if empty
