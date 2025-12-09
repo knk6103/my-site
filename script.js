@@ -113,6 +113,17 @@
       req.onsuccess = () => resolve(req.result);
       req.onerror = () => reject(req.error);
     });
+
+    // Research/History DB 초기화 (기존 데이터 유지)
+    const historyDB = await new Promise((resolve, reject) => {
+      const req = indexedDB.open('history-db', 1);
+      req.onupgradeneeded = (e) => {
+        const idb = e.target.result;
+        if(!idb.objectStoreNames.contains('activities')) idb.createObjectStore('activities', {keyPath:'id', autoIncrement:true});
+      };
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
   }
 
   // 페이지 로드 시 데이터 초기화

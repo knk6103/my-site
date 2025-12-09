@@ -495,9 +495,66 @@
     return intervals[repeat] || 0;
   }
 
+  // Initialize sample data if empty
+  async function initializeSampleDataIfEmpty(){
+    const allEvents = await idbGetAll();
+    if(allEvents.length === 0){
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = String(today.getMonth() + 1).padStart(2, '0');
+      
+      const sampleEvents = [
+        {
+          title: 'Weekly Lab Meeting',
+          startDate: `${year}-${month}-10`,
+          endDate: `${year}-${month}-10`,
+          time: '14:00',
+          desc: 'Regular lab meeting for project discussions',
+          color: 'blue',
+          repeat: 'weekly',
+          repeatEnd: `${year}-12-31`,
+          importance: false,
+          added: Date.now(),
+          groupId: 'g-weekly-' + Date.now()
+        },
+        {
+          title: 'Equipment Maintenance',
+          startDate: `${year}-${month}-15`,
+          endDate: `${year}-${month}-15`,
+          time: '',
+          desc: 'Scheduled maintenance for optical equipment',
+          color: 'red',
+          repeat: 'none',
+          repeatEnd: null,
+          importance: true,
+          added: Date.now(),
+          groupId: 'g-maint-' + Date.now()
+        },
+        {
+          title: 'Research Data Analysis',
+          startDate: `${year}-${month}-20`,
+          endDate: `${year}-${month}-22`,
+          time: '',
+          desc: 'Analysis of beam shaping experiment results',
+          color: 'green',
+          repeat: 'none',
+          repeatEnd: null,
+          importance: true,
+          added: Date.now(),
+          groupId: 'g-data-' + Date.now()
+        }
+      ];
+
+      for(const event of sampleEvents){
+        await idbPut(event);
+      }
+    }
+  }
+
   // Initialize
   (async function init(){
     await openDB();
+    await initializeSampleDataIfEmpty();
     renderCalendar();
     
     // Select today
