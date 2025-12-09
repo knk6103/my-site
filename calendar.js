@@ -529,9 +529,33 @@
     return intervals[repeat] || 0;
   }
 
+  // Clean up old sample events once (only when logged in)
+  async function purgeSampleEventsOnce(){
+    if(!window.labAuth || !window.labAuth.isAuthenticated()) return;
+    const flagKey = 'calendar-sample-purged';
+    try { if(localStorage.getItem(flagKey) === '1') return; } catch(_) {}
+
+    const sampleTitles = [
+      'Weekly Lab Meeting',
+      'Equipment Maintenance',
+      'Research Data Analysis'
+    ];
+    const samplePrefixes = ['g-weekly-','g-maint-','g-data-'];
+    const all = await idbGetAll();
+    for(const ev of all){
+      const byTitle = ev.title && sampleTitles.includes(ev.title);
+      const byGroup = ev.groupId && samplePrefixes.some(p => ev.groupId.startsWith(p));
+      if(byTitle || byGroup){
+        try { await idbDelete(ev.id); } catch(_) {}
+      }
+    }
+    try { localStorage.setItem(flagKey, '1'); } catch(_) {}
+  }
+
   // Initialize
   (async function init(){
     await openDB();
+    await purgeSampleEventsOnce();
     renderCalendar();
 
     // Select today

@@ -387,9 +387,32 @@
     });
   }
 
+  // Clean up old sample equipment once (only when logged in)
+  async function purgeSampleEquipmentOnce(){
+    if(!window.labAuth || !window.labAuth.isAuthenticated()) return;
+    const flagKey = 'equipment-sample-purged';
+    try { if(localStorage.getItem(flagKey) === '1') return; } catch(_) {}
+
+    const sampleNames = [
+      'High-Power Fiber Laser',
+      'Spatial Light Modulator',
+      'Laser Power Meter',
+      'Optical Bench',
+      'Dichroic Mirror Set'
+    ];
+    const all = await idbGetAll();
+    for(const item of all){
+      if(item.name && sampleNames.includes(item.name)){
+        try { await idbDelete(item.id); } catch(_) {}
+      }
+    }
+    try { localStorage.setItem(flagKey, '1'); } catch(_) {}
+  }
+
   // Initialize
   (async function init(){
     await openDB();
+    await purgeSampleEquipmentOnce();
     await renderEquipment();
   })();
 
