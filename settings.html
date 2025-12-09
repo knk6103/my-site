@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Settings — NK (KNK)</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">메인으로 건너뛰기</a>
+
+  <header role="banner" class="site-header">
+    <div class="container header-inner">
+      <div class="logo-section">
+        <h1 class="site-title">NK (KNK)</h1>
+        <p class="site-subtitle">Advanced Solid State Laser Lab — Hanyang University</p>
+      </div>
+
+      <nav role="navigation" aria-label="주요 메뉴" class="main-nav">
+        <ul>
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="research.html" class="nav-link">Research</a></li>
+          <li><a href="calendar.html" class="nav-link">Calendar</a></li>
+          <li><a href="equipment.html" class="nav-link">Equipment</a></li>
+          <li><a href="settings.html" class="nav-link">Settings</a></li>
+          <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+
+      <button id="theme-toggle" class="theme-toggle" aria-pressed="false" aria-label="테마 전환">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="5"/>
+        </svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+
+      <div class="header-auth">
+        <span id="auth-user-status" class="auth-user-status"></span>
+        <div id="auth-signin-container" class="auth-signin-container">
+          <button type="button" class="btn" id="auth-signin-btn">Sign in</button>
+        </div>
+        <button type="button" class="btn" id="auth-signout-btn" style="display:none;">Sign out</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" role="main">
+    <section class="settings-section" aria-labelledby="settings-title">
+      <div class="container">
+        <h2 id="settings-title">Settings</h2>
+
+        <div class="admin-section">
+          <h3>Manage Access</h3>
+          <div class="admin-controls">
+            <label>
+              Approved Emails (one per line):
+              <textarea id="admin-emails" placeholder="user1@example.com&#10;user2@example.com"></textarea>
+            </label>
+            <button type="button" class="btn primary" id="admin-save-emails">Save</button>
+            <p class="admin-note">Only these emails can access the system.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer role="contentinfo" class="site-footer">
+    <div class="container">
+      <p>© 2025 NK (KNK). Advanced Solid State Laser Lab — Hanyang University.</p>
+    </div>
+  </footer>
+
+  <script src="auth.js" defer></script>
+  <script src="script.js" defer></script>
+  <script src="admin.js" defer></script>
+  <script>
+    // Guard content: only show to authenticated users
+    window.addEventListener('DOMContentLoaded', ()=>{
+      const main = document.querySelector('main');
+      if(!window.labAuth.isAuthenticated()){
+        main.style.display = 'none';
+        window.labAuth.requireAuth();
+      }
+    });
+  </script>
+</body>
+</html>

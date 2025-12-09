@@ -22,6 +22,7 @@
           <li><a href="research.html" class="nav-link">Research</a></li>
           <li><a href="calendar.html" class="nav-link">Calendar</a></li>
           <li><a href="equipment.html" class="nav-link">Equipment</a></li>
+          <li><a href="settings.html" class="nav-link">Settings</a></li>
           <li><a href="index.html#contact" class="nav-link">Contact</a></li>
         </ul>
       </nav>
@@ -50,17 +51,6 @@
       <div class="container">
         <h2 id="research-title">Research Activities & Timeline</h2>
 
-        <details class="admin-section">
-          <summary>Admin: Manage Access</summary>
-          <div class="admin-controls">
-            <label>
-              Approved Emails (one per line):
-              <textarea id="admin-emails" placeholder="user1@example.com&#10;user2@example.com"></textarea>
-            </label>
-            <button type="button" class="btn primary" id="admin-save-emails">Save</button>
-            <p class="admin-note">Only these emails can access the system.</p>
-          </div>
-        </details>
         <!-- Activities section -->
         <div class="history-layout" style="margin-top:24px;">
           <div class="history-form-card">
@@ -156,7 +146,6 @@
   <script src="script.js" defer></script>
   <script src="research.js" defer></script>
   <script src="history.js" defer></script>
-  <script src="admin.js" defer></script>
   <script>
     // Guard content: only show to authenticated users
     window.addEventListener('DOMContentLoaded', ()=>{
