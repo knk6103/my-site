@@ -68,7 +68,6 @@
       sessionStorage.setItem(AUTH_EMAIL_KEY, email);
       currentUser = email;
       updateAuthUI();
-      if(typeof updateSettingsNav === 'function') updateSettingsNav();
       return true;
     } catch(_) {
       alert('로그인 저장에 실패했습니다.');
@@ -138,6 +137,7 @@
       signInBtn.addEventListener('click', ()=>{
         if(login(emailInput.value)){
           modal.style.display = 'none';
+          updateSettingsNav();
         }
       });
       emailInput.addEventListener('keypress', (e)=>{
