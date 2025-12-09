@@ -387,94 +387,9 @@
     });
   }
 
-  // Initialize sample data if empty
-  async function initializeSampleDataIfEmpty(){
-    const allEquip = await idbGetAll();
-    if(allEquip.length === 0){
-      const sampleEquipment = [
-        {
-          name: 'High-Power Fiber Laser',
-          category: 'laser',
-          model: 'IPG YLS-50000',
-          serial: 'YLS-50K-20250101',
-          quantity: 1,
-          status: 'active',
-          location: 'Lab A',
-          date: '2024-03-15',
-          dateUnknown: false,
-          notes: '50W fiber laser system for beam shaping experiments'
-        },
-        {
-          name: 'Spatial Light Modulator',
-          category: 'optics',
-          model: 'Thorlabs SLM505',
-          serial: 'SLM-505-001',
-          quantity: 1,
-          status: 'active',
-          location: 'Lab B',
-          date: '2024-06-20',
-          dateUnknown: false,
-          notes: '512x512 pixel phase modulation'
-        },
-        {
-          name: 'Laser Power Meter',
-          category: 'measurement',
-          model: 'Coherent LaserCheck',
-          serial: 'LC-20250001',
-          quantity: 2,
-          status: 'active',
-          location: 'Lab A',
-          date: '2025-01-10',
-          dateUnknown: false,
-          notes: 'Digital laser power measurement'
-        },
-        {
-          name: 'Optical Bench',
-          category: 'equipment',
-          model: 'Newport MB4000A',
-          serial: 'MB4K-0552',
-          quantity: 1,
-          status: 'maintenance',
-          location: 'Lab C',
-          date: '2023-11-05',
-          dateUnknown: false,
-          notes: 'Precision optical alignment platform'
-        },
-        {
-          name: 'Dichroic Mirror Set',
-          category: 'optics',
-          model: 'Various',
-          serial: 'DCM-SET-2024',
-          quantity: 8,
-          status: 'active',
-          location: 'Storage',
-          dateUnknown: true,
-          notes: 'High-power dichroic mirrors for wavelength separation'
-        }
-      ];
-
-      for(const item of sampleEquipment){
-        await idbPut(item);
-      }
-    }
-  }
-
-  // Initialize (wait for script.js to populate sample data)
+  // Initialize
   (async function init(){
     await openDB();
-    
-    // Wait a moment to ensure script.js has run first
-    await new Promise(resolve => {
-      if(document.readyState === 'loading'){
-        document.addEventListener('DOMContentLoaded', () => {
-          setTimeout(resolve, 100);
-        });
-      } else {
-        setTimeout(resolve, 100);
-      }
-    });
-    
-    await initializeSampleDataIfEmpty();
     await renderEquipment();
   })();
 

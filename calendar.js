@@ -331,13 +331,19 @@
           }
 
           const eventText = document.createElement('span');
-          eventText.textContent = (event.important ? '★ ' : '') + event.title;
+          const fullText = (event.important ? '★ ' : '') + (event.title || '');
+          const shortText = fullText.length > 24 ? fullText.slice(0, 24) + '…' : fullText;
+          eventText.textContent = shortText;
+          eventText.dataset.fullText = fullText;
+          eventText.dataset.shortText = shortText;
           eventTag.appendChild(eventText);
           
           // Add click handler to toggle expanded view
           eventTag.addEventListener('click', (e) => {
             e.stopPropagation();
-            eventTag.classList.toggle('expanded');
+            const expanded = eventTag.classList.toggle('expanded');
+            eventText.textContent = expanded ? eventText.dataset.fullText : eventText.dataset.shortText;
+            eventTag.style.whiteSpace = expanded ? 'pre-wrap' : '';
           });
           
           preview.appendChild(eventTag);
@@ -523,68 +529,11 @@
     return intervals[repeat] || 0;
   }
 
-  // Initialize sample data if empty
-  async function initializeSampleDataIfEmpty(){
-    const allEvents = await idbGetAll();
-    if(allEvents.length === 0){
-      const today = new Date();
-      const year = today.getFullYear();
-      const month = String(today.getMonth() + 1).padStart(2, '0');
-      
-      const sampleEvents = [
-        {
-          title: 'Weekly Lab Meeting',
-          startDate: `${year}-${month}-10`,
-          endDate: `${year}-${month}-10`,
-          time: '14:00',
-          desc: 'Regular lab meeting for project discussions',
-          color: 'blue',
-          repeat: 'weekly',
-          repeatEnd: `${year}-12-31`,
-          importance: false,
-          added: Date.now(),
-          groupId: 'g-weekly-' + Date.now()
-        },
-        {
-          title: 'Equipment Maintenance',
-          startDate: `${year}-${month}-15`,
-          endDate: `${year}-${month}-15`,
-          time: '',
-          desc: 'Scheduled maintenance for optical equipment',
-          color: 'red',
-          repeat: 'none',
-          repeatEnd: null,
-          importance: true,
-          added: Date.now(),
-          groupId: 'g-maint-' + Date.now()
-        },
-        {
-          title: 'Research Data Analysis',
-          startDate: `${year}-${month}-20`,
-          endDate: `${year}-${month}-22`,
-          time: '',
-          desc: 'Analysis of beam shaping experiment results',
-          color: 'green',
-          repeat: 'none',
-          repeatEnd: null,
-          importance: true,
-          added: Date.now(),
-          groupId: 'g-data-' + Date.now()
-        }
-      ];
-
-      for(const event of sampleEvents){
-        await idbPut(event);
-      }
-    }
-  }
-
   // Initialize
   (async function init(){
     await openDB();
-    await initializeSampleDataIfEmpty();
-    renderCalendar();
-    
+    render();
+
     // Select today
     const today = new Date();
     const todayStr = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
