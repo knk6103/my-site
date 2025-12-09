@@ -440,77 +440,11 @@
     filterStatusEl.addEventListener('change', ()=>{ filterStatus = filterStatusEl.value; renderList(); });
   }
 
-  // Initialize sample data if empty
-  async function initializeSampleDataIfEmpty(){
-    const all = await idbGetAll();
-    if(all.length === 0){
-      const sampleActivities = [
-        {
-          title: 'Beam Shaping Using Spatial Light Modulator',
-          researcher: 'Kim, NK',
-          category: 'research',
-          role: 'PI',
-          start: '2024-01-15',
-          end: '2025-12-15',
-          ongoing: true,
-          status: 'ongoing',
-          desc: 'Research on dynamic beam shaping using spatial light modulators for improved optical efficiency.',
-          attach: null,
-          added: Date.now()
-        },
-        {
-          title: 'High-Power Fiber Laser Optimization',
-          researcher: 'Lee, JS',
-          category: 'research',
-          role: 'Co-investigator',
-          start: '2024-03-01',
-          end: '2025-02-28',
-          ongoing: false,
-          status: 'completed',
-          desc: 'Optimization of fiber laser parameters for maximum power conversion efficiency.',
-          attach: null,
-          added: Date.now()
-        },
-        {
-          title: 'Optical Fiber Amplifiers: Recent Advances',
-          researcher: 'Kim, NK',
-          category: 'presentation',
-          role: 'Presenter',
-          start: '2025-06-15',
-          end: '2025-06-15',
-          ongoing: false,
-          status: 'completed',
-          desc: 'Conference presentation at SPIE Photonics West 2025.',
-          attach: null,
-          added: Date.now()
-        },
-        {
-          title: 'Dichroic Mirror Coatings for Multi-wavelength Laser Systems',
-          researcher: 'Park, SH',
-          category: 'paper',
-          role: 'First Author',
-          start: '2024-06-01',
-          end: '2025-03-01',
-          ongoing: false,
-          status: 'completed',
-          desc: 'Published in Journal of Optical Engineering. Study on novel dichroic mirror coatings.',
-          attach: null,
-          added: Date.now()
-        }
-      ];
-
-      for(const activity of sampleActivities){
-        await idbPut(activity);
-      }
-    }
-  }
-
   // init
   (async function init(){
     await openDB();
     try { canWrite = localStorage.getItem(WRITE_KEY) === '1'; } catch(_) { canWrite = false; }
     updateAuthUI();
-    await initializeSampleDataIfEmpty();
     await renderList();
     await renderSummary();
   })();
