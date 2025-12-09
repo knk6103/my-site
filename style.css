@@ -1620,6 +1620,9 @@ main {
 .filter-group label {
   display: inline-block;
   margin-right: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--dark-text);
@@ -1627,7 +1630,9 @@ main {
 }
 
 .filter-group input[type="checkbox"] {
-  margin-right: 6px;
+  width: auto;
+  margin: 0;
+    flex-shrink: 0;
   cursor: pointer;
 }
 
