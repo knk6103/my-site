@@ -216,6 +216,14 @@
       desc.className = 'event-desc';
       desc.textContent = event.desc || '';
       
+      // Add click handler to toggle expanded view
+      if(event.desc && event.desc.trim()){
+        desc.addEventListener('click', (e) => {
+          e.stopPropagation();
+          desc.classList.toggle('expanded');
+        });
+      }
+      
       const actions = document.createElement('div');
       actions.className = 'event-actions';
       

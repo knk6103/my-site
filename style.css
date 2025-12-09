@@ -1165,6 +1165,21 @@ main {
   font-size: 0.85rem;
   color: var(--medium-text);
   line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.event-desc:hover {
+  color: var(--primary-blue);
+}
+
+.event-desc.expanded {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
 }
 
 .event-actions {
