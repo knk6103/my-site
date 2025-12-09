@@ -414,6 +414,8 @@
       // determine groupId of existing
       const baseEventToDelete = allEvents.find(e => e.id === editingEventId);
       const gid = (baseEventToDelete && baseEventToDelete.groupId) || null;
+      const baseImportance = baseEventToDelete ? baseEventToDelete.important : false;
+      
       if(gid){
         for(const evt of allEvents){
           if(evt.groupId === gid) await idbDelete(evt.id);
@@ -429,7 +431,7 @@
         await idbPut({
           title, startDate, endDate, time, desc, color,
           repeat, repeatEnd: repeatEnd || null,
-          important: false, added: Date.now(), groupId
+          important: baseImportance, added: Date.now(), groupId
         });
       } else {
         const s = new Date(startDate);
@@ -442,7 +444,7 @@
           await idbPut({
             title, startDate: sStr, endDate: eStr, time, desc, color,
             repeat, repeatEnd: repeatEnd || null,
-            important: false, added: Date.now(), groupId
+            important: baseImportance, added: Date.now(), groupId
           });
           cur = addDays(cur, getRepeatInterval(repeat));
         }
@@ -476,8 +478,9 @@
       }
     }
     
+    const isUpdate = editingEventId !== null;
     eventForm.reset();
-    alert(editingEventId ? 'Event updated!' : 'Event added!');
+    alert(isUpdate ? 'Event updated!' : 'Event added!');
     
     // Re-render events for selected date
     if(selectedDate) await renderEventsForDate(selectedDate);
