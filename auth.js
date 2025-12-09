@@ -68,6 +68,7 @@
       sessionStorage.setItem(AUTH_EMAIL_KEY, email);
       currentUser = email;
       updateAuthUI();
+      if(typeof updateSettingsNav === 'function') updateSettingsNav();
       return true;
     } catch(_) {
       alert('로그인 저장에 실패했습니다.');
@@ -81,6 +82,7 @@
       sessionStorage.removeItem(AUTH_EMAIL_KEY);
       currentUser = null;
       updateAuthUI();
+      if(typeof updateSettingsNav === 'function') updateSettingsNav();
     } catch(_) {}
   }
 
@@ -145,29 +147,19 @@
     modal.style.display = 'flex';
   }
 
-  // Wire header auth UI
-  window.addEventListener('DOMContentLoaded', ()=>{
-    currentUser = getCurrentUser();
-    updateAuthUI();
-
-    const signInBtn = document.getElementById('auth-signin-btn');
-    const signOutBtn = document.getElementById('auth-signout-btn');
-
-    if(signInBtn) signInBtn.addEventListener('click', showLoginModal);
-    if(signOutBtn) signOutBtn.addEventListener('click', logout);
-
+  function updateSettingsNav(){
     // Dynamically inject Settings nav only for admin email
     const navLists = document.querySelectorAll('.main-nav ul');
     navLists.forEach(list => {
+      // Remove existing first
+      const existing = list.querySelector('.nav-settings-link');
+      if(existing && existing.parentNode) existing.parentNode.remove();
+      
       const currentEmail = (getCurrentUser() || '').toLowerCase();
       const adminEmail = ADMIN_EMAIL.toLowerCase();
       
       // Only add Settings if exact match with admin email
       if(currentEmail !== adminEmail) return;
-      
-      // Avoid duplicates if already inserted
-      const existing = list.querySelector('.nav-settings-link');
-      if(existing) return;
       
       const li = document.createElement('li');
       li.className = 'nav-settings-item';
@@ -178,6 +170,19 @@
       li.appendChild(a);
       list.appendChild(li); // Add at the end
     });
+  }
+
+  // Wire header auth UI
+  window.addEventListener('DOMContentLoaded', ()=>{
+    currentUser = getCurrentUser();
+    updateAuthUI();
+    updateSettingsNav();
+
+    const signInBtn = document.getElementById('auth-signin-btn');
+    const signOutBtn = document.getElementById('auth-signout-btn');
+
+    if(signInBtn) signInBtn.addEventListener('click', showLoginModal);
+    if(signOutBtn) signOutBtn.addEventListener('click', logout);
   });
 
   // Expose to global
