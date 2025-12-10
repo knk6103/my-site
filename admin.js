@@ -8,6 +8,12 @@
   window.addEventListener('DOMContentLoaded', async ()=>{
     const adminSection = document.querySelector('.admin-section');
     const currentUser = (window.labAuth.getCurrentUser() || '').toLowerCase();
+    
+    // 🔍 디버깅: 페이지 로드 시 자동으로 테이블 확인
+    console.log('=== Settings 페이지 로드 시작 ===');
+    console.log('현재 사용자:', currentUser);
+    const { data: tableCheck, error: tableError } = await window.supabaseClient.from('approved_emails').select('*');
+    console.log('📋 approved_emails 테이블 내용:', tableCheck, tableError);
 
     // Hide admin section if not admin email
     if(currentUser !== ADMIN_EMAIL.toLowerCase()){

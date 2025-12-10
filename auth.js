@@ -25,24 +25,36 @@
   }
 
   async function setApprovedEmails(emails){
-    // 간단한 방식: 기존 이메일 모두 삭제 후 새로 추가
+    // UPSERT 방식: 각 이메일을 개별적으로 upsert (삭제 없이)
     const unique = Array.from(new Set((emails || []).map(e => e.toLowerCase()).filter(Boolean)));
     console.log('Setting approved emails to:', unique);
     
     try {
-      // 1. 모든 행 삭제
-      await supabase.from('approved_emails').delete().gt('id', -1);
-      console.log('삭제 완료');
+      // 기존 이메일 가져오기
+      const { data: existing } = await supabase.from('approved_emails').select('email');
+      const existingEmails = (existing || []).map(r => r.email);
+      console.log('기존 이메일:', existingEmails);
       
-      // 2. 새로운 이메일 추가
-      if(unique.length > 0) {
-        const { data, error } = await supabase.from('approved_emails').insert(
-          unique.map(e => ({ email: e }))
-        ).select();
-        
-        if(error) throw error;
-        console.log('추가 완료:', data);
+      // 삭제할 이메일 (기존에는 있지만 새 목록에는 없는 것)
+      const toDelete = existingEmails.filter(e => !unique.includes(e));
+      if(toDelete.length > 0) {
+        for(const email of toDelete) {
+          await supabase.from('approved_emails').delete().eq('email', email);
+        }
+        console.log('삭제된 이메일:', toDelete);
       }
+      
+      // 추가할 이메일 (새 목록에는 있지만 기존에는 없는 것)
+      const toAdd = unique.filter(e => !existingEmails.includes(e));
+      if(toAdd.length > 0) {
+        const { data, error } = await supabase.from('approved_emails').insert(
+          toAdd.map(e => ({ email: e }))
+        ).select();
+        if(error) throw error;
+        console.log('추가된 이메일:', data);
+      }
+      
+      console.log('저장 완료!');
     } catch(err) {
       console.error('setApprovedEmails error:', err);
       throw err;
@@ -51,13 +63,18 @@
 
   async function isEmailApproved(email){
     const target = (email || '').toLowerCase();
+    console.log('🔍 isEmailApproved 체크:', target);
     if(!target) return false;
+    
     const { data, error } = await supabase
       .from('approved_emails')
       .select('email')
       .eq('email', target)
       .limit(1)
       .maybeSingle();
+    
+    console.log('✅ isEmailApproved 결과:', { email: target, data, error });
+    
     if(error && error.code !== 'PGRST116'){ // PGRST116: no rows
       console.error('approve check failed', error);
       return false;
@@ -189,12 +206,21 @@
   }
 
   async function enforceApproval(){
-    if(!currentUser) return;
-    console.log('승인 검증 시작:', currentUser);
+    console.log('🔒 enforceApproval 시작, currentUser:', currentUser);
+    if(!currentUser){
+      console.log('❌ 사용자 없음');
+      return;
+    }
+    
+    // 먼저 전체 approved_emails 테이블 확인
+    const { data: allEmails, error: fetchError } = await supabase.from('approved_emails').select('*');
+    console.log('📋 전체 approved_emails 테이블:', allEmails, fetchError);
+    
     const ok = await isEmailApproved(currentUser);
-    console.log('승인 결과:', ok);
+    console.log('✅ 승인 여부:', ok);
+    
     if(!ok){
-      alert('승인되지 않은 이메일입니다. 관리자에게 문의하세요.');
+      alert('승인되지 않은 이메일입니다.\n현재 이메일: ' + currentUser + '\n승인된 이메일: ' + (allEmails || []).map(e => e.email).join(', '));
       console.log('승인 실패 - 로그아웃 시작');
       await logout();
     } else {
