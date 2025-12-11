@@ -175,12 +175,15 @@
     if(signOutBtn) signOutBtn.addEventListener('click', logout);
   }
 
-  // Load session from localStorage on page load
+  // Load session from localStorage IMMEDIATELY (not waiting for DOMContentLoaded)
+  try {
+    const saved = localStorage.getItem(SESSION_KEY);
+    if(saved) currentUser = saved;
+    console.log('✅ 저장된 세션 로드:', currentUser);
+  } catch(_) {}
+
+  // Setup DOMContentLoaded handlers
   window.addEventListener('DOMContentLoaded', ()=>{
-    try {
-      const saved = localStorage.getItem(SESSION_KEY);
-      if(saved) currentUser = saved;
-    } catch(_) {}
     updateAuthUI();
     updateSettingsNav();
     const main = document.querySelector('main');

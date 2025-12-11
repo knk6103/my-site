@@ -151,7 +151,7 @@
   <script src="auth.js"></script>
   <script>
     // Guard: hide content if not logged in, show if logged in
-    document.addEventListener('DOMContentLoaded', ()=>{
+    function checkAuth(){
       const main = document.querySelector('main');
       if(!window.labAuth){
         if(main) main.style.display = 'none';
@@ -163,7 +163,11 @@
         if(main) main.style.display = 'none';
         window.labAuth.requireAuth();
       }
-    });
+    }
+    
+    document.addEventListener('DOMContentLoaded', checkAuth);
+    // Also check immediately in case auth.js already loaded
+    checkAuth();
   </script>
   <script src="script.js" defer></script>
   <script src="calendar.js" defer></script>

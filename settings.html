@@ -67,7 +67,7 @@
   <script src="admin.js" defer></script>
   <script>
     // Guard content: only show to authenticated admins
-    window.addEventListener('DOMContentLoaded', ()=>{
+    function checkAuth(){
       const main = document.querySelector('main');
       if(!window.labAuth){
         if(main) main.style.display = 'none';
@@ -84,7 +84,10 @@
         return;
       }
       if(main) main.style.display = '';
-    });
+    }
+    
+    window.addEventListener('DOMContentLoaded', checkAuth);
+    checkAuth();
   </script>
 </body>
 </html>

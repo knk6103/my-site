@@ -149,7 +149,7 @@
     window.WRITE_PASSPHRASE = 'my-lab-write-2025';
     
     // Guard content: show when logged in, hide otherwise
-    document.addEventListener('DOMContentLoaded', ()=>{
+    function checkAuth(){
       if(window.labAuth) window.labAuth.updateAuthUI();
       const main = document.querySelector('main');
       if(!window.labAuth){
@@ -162,7 +162,10 @@
         if(main) main.style.display = 'none';
         window.labAuth.requireAuth();
       }
-    });
+    }
+    
+    document.addEventListener('DOMContentLoaded', checkAuth);
+    checkAuth();
   </script>
   <script src="https://unpkg.com/fuse.js@6.6.2/dist/fuse.min.js"></script>
   <script src="research.js" defer></script>
