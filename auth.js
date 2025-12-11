@@ -153,7 +153,7 @@
       modal.innerHTML = `
         <div class="auth-modal-content">
           <h2>Lab Access</h2>
-          <p>승인된 이메일로 접속해주세요.</p>
+          <p>이메일로 로그인해주세요.</p>
           <input type="email" id="auth-email-input" placeholder="your.email@example.com" />
           <button type="button" class="btn primary" id="auth-modal-signin">Sign In (Email Link)</button>
           <button type="button" class="btn" id="auth-modal-close" style="display:none;">Close</button>
